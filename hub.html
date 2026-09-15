@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Hub · Sentido</title>
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<link rel="stylesheet" href="/assets/panel.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="barra">
+    <div class="marca">
+      <img src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+      <span class="ojo" aria-hidden="true"></span>
+    </div>
+    <div class="cliente">
+      <span class="rotulo">Reporte de resultados · Cliente</span>
+      <h2 id="brand-name">—</h2>
+    </div>
+    <div class="controles no-print">
+      <div class="selrango">
+        <button id="rango-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="cal" aria-hidden="true">▦</span>
+          <span class="rng" id="rango-label">—</span>
+          <span class="cal" aria-hidden="true">▾</span>
+        </button>
+        <div class="panelrango" id="rango-panel" hidden>
+          <span class="rotulo">Período</span>
+          <div class="presets" id="presets">
+            <button data-k="este-mes">Este mes</button>
+            <button data-k="mes-pasado">Mes pasado</button>
+            <button data-k="7d">Últimos 7 días</button>
+            <button data-k="30d">Últimos 30 días</button>
+          </div>
+          <div class="custom">
+            <label>Desde<input type="date" id="c-from"></label>
+            <label>Hasta<input type="date" id="c-to"></label>
+          </div>
+          <label class="cmp"><input type="checkbox" id="cmp" checked> Comparar con período anterior</label>
+          <button class="btn" id="aplicar" style="width:100%;justify-content:center;margin-top:14px">Aplicar</button>
+        </div>
+      </div>
+      <button class="btn btn--fantasma" id="imprimir" type="button">Imprimir</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <main id="cuerpo">
+    <section aria-label="Indicadores del período">
+      <div class="kpis" id="kpis"></div>
+      <div class="an-kpi-slim" id="an-kpi" hidden></div>
+    </section>
+
+    <section id="sec-pauta">
+      <div class="cab"><div><div class="pleca"></div><h3>Pauta</h3></div>
+        <p class="meta-nota">Inversión en campañas de Meta Ads y Google Ads durante el período.</p></div>
+      <div class="cols">
+        <div class="col"><div id="col-metaAds"></div></div>
+        <div class="col"><div id="col-googleAds"></div></div>
+      </div>
+      <div class="analisis" id="an-pauta" hidden></div>
+    </section>
+
+    <section id="sec-trend">
+      <div class="cab"><div><div class="pleca"></div><h3>Día a día</h3></div>
+        <p class="meta-nota">Ritmo de inversión y de alcance orgánico dentro del período.</p></div>
+      <div class="trend">
+        <div class="grafo" id="grafo-spend"><h4>Inversión Meta Ads</h4><div class="gsub num" id="gsub-spend"></div></div>
+        <div class="grafo" id="grafo-reach"><h4>Alcance orgánico Instagram</h4><div class="gsub num" id="gsub-reach"></div></div>
+      </div>
+      <div class="analisis" id="an-trend" hidden></div>
+    </section>
+
+    <section id="sec-redes">
+      <div class="cab"><div><div class="pleca"></div><h3>Redes</h3></div>
+        <p class="meta-nota">Desempeño orgánico de los perfiles, sin pauta de por medio.</p></div>
+      <div class="cols">
+        <div class="col"><div id="col-instagram"></div></div>
+        <div class="col"><div id="col-facebook"></div></div>
+      </div>
+      <div class="analisis" id="an-redes" hidden></div>
+    </section>
+
+    <section class="papel" id="sec-lectura">
+      <div class="lectura"><div class="pleca"></div><h3>Lectura del mes</h3>
+        <div class="firma">Análisis · Sentido</div>
+        <div id="lectura-cuerpo"></div></div>
+    </section>
+  </main>
+
+  <div id="cargando" class="cargando" hidden>Cargando datos…</div>
+
+  <footer>
+    <div class="fm"><span class="ojo" aria-hidden="true"></span>
+      <img class="nom" src="/assets/logo-sentido-nombre-light.png" alt="Sentido"></div>
+    <p class="fnota" id="fnota">Documento privado · Sentido, branding &amp; advertising desde 2010.</p>
+  </footer>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const BRAND = decodeURIComponent(location.pathname.replace(/^\/+|\/+$/g,'')) || 'amancay';
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const esMX = n => (Number(n)||0).toLocaleString('es-MX');
+
+// ── Fechas ──
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseISO = s => { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
+function presetRange(k){
+  const now=new Date(); now.setHours(0,0,0,0);
+  const y=now.getFullYear(), mo=now.getMonth();
+  if(k==='este-mes')   return [iso(new Date(y,mo,1)), iso(now)];
+  if(k==='mes-pasado') return [iso(new Date(y,mo-1,1)), iso(new Date(y,mo,0))];
+  if(k==='7d'){ const f=new Date(now); f.setDate(now.getDate()-6);  return [iso(f), iso(now)]; }
+  if(k==='30d'){ const f=new Date(now); f.setDate(now.getDate()-29); return [iso(f), iso(now)]; }
+}
+function prevPeriod(from,to){
+  const f=parseISO(from), t=parseISO(to);
+  const days=Math.round((t-f)/864e5)+1;
+  const pt=new Date(f); pt.setDate(f.getDate()-1);
+  const pf=new Date(pt); pf.setDate(pt.getDate()-(days-1));
+  return [iso(pf), iso(pt)];
+}
+function rangeLabel(from,to){
+  const f=parseISO(from), t=parseISO(to);
+  const fm=MESES[f.getMonth()].slice(0,3), tm=MESES[t.getMonth()].slice(0,3);
+  if(f.getMonth()===t.getMonth() && f.getFullYear()===t.getFullYear())
+    return `${f.getDate()}–${t.getDate()} ${tm} ${t.getFullYear()}`;
+  return `${f.getDate()} ${fm} – ${t.getDate()} ${tm} ${t.getFullYear()}`;
+}
+
+// ── Datos de ejemplo (Amancay, reales de Metricool) mientras se conecta ──
+const SPEND_AUG=[0,0,0,694.44,2079.11,1337.98,1242.73,1136.87,1726.58,1400.88,1295.78,1878.28,1831,1312.86,969.24,1692.56,1468.15,1570,1520.71,1681.16,948.48,0,0,1268.27,2240.84,2082.51,1689.39,1751.96,1540.37,1863.58,757.25];
+const REACH_AUG=[22,17,37,1424,2637,1682,1288,2202,2896,2025,1522,3477,2623,1721,1897,3289,2819,3014,3289,3418,2088,71,80,3471,4635,2875,3913,2385,2937,2172,907];
+const seriesAug = arr => arr.map((v,i)=>({date:`2026-08-${String(i+1).padStart(2,'0')}`, value:v}));
+const DEMO = {
+  amancay: {
+    '2026-08': { data:{
+        metaAds:{spend:38980.98,impressions:127273,reach:56261,clicks:1896,ctr:1.49,cpc:20.56,cpm:306.28,frequency:2.26},
+        googleAds:{cost:15957.76,impressions:11096,clicks:925,ctr:8.34,cpc:17.25,conversions:0},
+        instagram:{followers:1961,reach:66833,views:134264,net:24,engaged:91,gained:43,lost:19},
+        facebook:{followers:1471,interactions:47,pageViews:725,contentViews:42580} },
+      series:{ metaAds_spend:seriesAug(SPEND_AUG), instagram_reach:seriesAug(REACH_AUG) } },
+    '2026-07': { data:{
+        metaAds:{spend:40000,impressions:178468,reach:91395,clicks:1824,ctr:1.02,cpc:21.93,cpm:224.13,frequency:1.95},
+        googleAds:{cost:16294.68,impressions:61837,clicks:3147,ctr:5.09,cpc:5.18,conversions:0},
+        instagram:{followers:1937,reach:115961,views:221251,net:21,engaged:136,gained:36,lost:15},
+        facebook:{followers:1466,interactions:68,pageViews:448,contentViews:43311} },
+      series:{} },
+  }
+};
+function demoFor(brand,from,to){
+  const mk=from.slice(0,7);
+  const d=DEMO[brand] && DEMO[brand][mk];
+  return (d && to.slice(0,7)===mk) ? d : null;
+}
+
+// ── Carga ──
+async function loadData(brand,from,to){
+  try{
+    const r=await fetch(`/api/metrics?brand=${encodeURIComponent(brand)}&from=${from}&to=${to}`);
+    if(r.status===401){ location.href='/'; return {status:'auth'}; }
+    if(!r.ok) throw new Error('http '+r.status);
+    return {status:'live', data:await r.json()};
+  }catch(e){
+    const d=demoFor(brand,from,to);
+    return d ? {status:'demo', data:d} : {status:'nodata'};
+  }
+}
+
+// ── Formato ──
+const fmt = {
+  money:  v => '<span class="cur">$</span>'+esMX(Math.round(v)),
+  money2: v => '<span class="cur">$</span>'+(Number(v)||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}),
+  int:    v => esMX(Math.round(v)),
+  pct:    v => (Number(v)||0).toFixed(2)+'%',
+  dec:    v => (Number(v)||0).toFixed(2),
+  signed: v => (v>=0?'+':'−')+esMX(Math.abs(v)),
+};
+function deltaHTML(cur,prev){
+  if(prev==null || prev===0 || cur==null) return '';
+  const r=((cur-prev)/prev)*100;
+  return `<span class="delta"><span class="arw">${r>=0?'▲':'▼'}</span>${Math.abs(r).toFixed(1)}%</span>`;
+}
+
+// ── Config de KPIs y columnas (nombres de campo = shape de /api/metrics) ──
+const KPIS = [
+  {rot:'Inversión total en pauta', f:'money',  v:d=>(num(d.metaAds&&d.metaAds.spend)+num(d.googleAds&&d.googleAds.cost))},
+  {rot:'Clics a sitio',            f:'int',    v:d=>(num(d.metaAds&&d.metaAds.clicks)+num(d.googleAds&&d.googleAds.clicks))},
+  {rot:'Alcance de campañas',      f:'int',    v:d=>num(d.metaAds&&d.metaAds.reach)},
+  {rot:'Costo por clic promedio',  f:'money2', v:d=>{const c=num(d.metaAds&&d.metaAds.clicks)+num(d.googleAds&&d.googleAds.clicks);return c?(num(d.metaAds&&d.metaAds.spend)+num(d.googleAds&&d.googleAds.cost))/c:0;}},
+];
+const COLS = {
+  metaAds:{title:'Meta Ads', fuente:'Facebook · Instagram', rows:[
+    {k:'spend',f:'money2',et:'Inversión'},{k:'impressions',f:'int',et:'Impresiones'},{k:'reach',f:'int',et:'Alcance'},
+    {k:'clicks',f:'int',et:'Clics'},{k:'ctr',f:'pct',et:'CTR'},{k:'cpc',f:'money2',et:'Costo por clic'},
+    {k:'frequency',f:'dec',et:'Frecuencia'},{k:'cpm',f:'money2',et:'CPM'}]},
+  googleAds:{title:'Google Ads', fuente:'Búsqueda · Display', rows:[
+    {k:'cost',f:'money2',et:'Inversión'},{k:'impressions',f:'int',et:'Impresiones'},{k:'clicks',f:'int',et:'Clics'},
+    {k:'ctr',f:'pct',et:'CTR'},{k:'cpc',f:'money2',et:'Costo por clic'},{k:'conversions',f:'int',et:'Conversiones'}],
+    aviso:o => o.conversions===0 ? '<b>Sin seguimiento de conversiones.</b> Las campañas registran clics, no leads. Instalar el seguimiento para reportar costo por lead real.' : ''},
+  instagram:{title:'Instagram', fuente:'Perfil orgánico', rows:[
+    {k:'followers',f:'int',et:'Seguidores',noDelta:true},{k:'net',f:'signed',et:'Crecimiento neto'},
+    {k:'reach',f:'int',et:'Alcance'},{k:'views',f:'int',et:'Visualizaciones'},{k:'engaged',f:'int',et:'Cuentas que interactuaron'}]},
+  facebook:{title:'Facebook', fuente:'Página orgánica', rows:[
+    {k:'followers',f:'int',et:'Seguidores',noDelta:true},{k:'contentViews',f:'int',et:'Vistas de contenido'},
+    {k:'pageViews',f:'int',et:'Vistas de página'},{k:'interactions',f:'int',et:'Interacciones'}]},
+};
+const num = v => Number(v)||0;
+
+function renderKPIs(D,P){
+  $('#kpis').innerHTML = KPIS.map(k=>{
+    const cur=k.v(D), dl = P ? deltaHTML(cur,k.v(P)) : '';
+    const vs = P ? '<span class="vs">vs período previo</span>' : '';
+    return `<div class="kpi"><div class="rotulo">${k.rot}</div><div class="cifra num">${fmt[k.f](cur)}</div><div class="pie">${dl}${vs}</div></div>`;
+  }).join('');
+}
+function renderCol(net,D,P){
+  const c=COLS[net], o=D[net]||{}, op=P&&P[net];
+  let html=`<div class="col-cab"><h4>${c.title}</h4><span class="fuente">${c.fuente}</span></div>`;
+  html += c.rows.map(r=>{
+    const dl = (op && !r.noDelta) ? deltaHTML(o[r.k], op[r.k]) : '';
+    return `<div class="renglon"><span class="et">${r.et}</span><span class="val num">${fmt[r.f](o[r.k])}</span><span class="dl">${dl}</span></div>`;
+  }).join('');
+  const av = c.aviso && c.aviso(o);
+  if(av) html += `<div class="aviso"><span class="rombo"></span><p>${av}</p></div>`;
+  $('#col-'+net).innerHTML = html;
+}
+
+// ── Análisis Nivel 1 (computado) ──
+const pctRaw=(c,p)=>((c-p)/p)*100, signPct=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(0)+'%';
+function compressDays(a){ if(!a.length)return''; const p=[]; let s=a[0],pr=a[0];
+  for(let i=1;i<=a.length;i++){ if(a[i]===pr+1){pr=a[i];continue;} p.push(s===pr?''+s:s+'–'+pr); s=a[i];pr=a[i]; } return p.join(' y '); }
+function insKPI(D,P){ if(!P)return[]; const m=D.metaAds||{},g=D.googleAds||{},mp=P.metaAds||{},gp=P.googleAds||{};
+  const clk=num(m.clicks)+num(g.clicks),clkP=num(mp.clicks)+num(gp.clicks); if(!clkP)return[];
+  const cpc=(num(m.spend)+num(g.cost))/(clk||1),cpcP=(num(mp.spend)+num(gp.cost))/clkP;
+  return [`Contra el período previo, los <b>clics ${signPct(pctRaw(clk,clkP))}</b> y el <b>costo por clic ${signPct(pctRaw(cpc,cpcP))}</b>. Ahí está la lectura rápida del período.`]; }
+function insPauta(D,P){ const o=[],m=D.metaAds||{},g=D.googleAds||{};
+  if(P){ const gp=P.googleAds||{},mp=P.metaAds||{};
+    if(gp.impressions){ const gi=pctRaw(num(g.impressions),num(gp.impressions));
+      if(gi<-40) o.push(`<b>Google Ads: ${signPct(gi)} en impresiones</b> con inversión casi igual (${signPct(pctRaw(num(g.cost),num(gp.cost)||1))}). El clic pasó de $${(gp.cpc||0).toFixed(2)} a <b>$${(g.cpc||0).toFixed(2)}</b> — revisar pausa o pujas.`); }
+    if(mp.ctr){ const ctr=pctRaw(num(m.ctr),num(mp.ctr)),rc=pctRaw(num(m.reach),num(mp.reach)||1);
+      if(ctr>10&&rc<0) o.push(`<b>Meta: CTR ${signPct(ctr)}</b> aunque el alcance ${signPct(rc)} y la frecuencia subió a <b>${(m.frequency||0).toFixed(2)}</b>. Mejor respuesta, menos gente nueva.`); }
+  }
+  if(g.conversions===0) o.push('Ninguna plataforma reporta <b>conversiones</b>: hoy se mide tráfico, no leads. Pendiente #1.');
+  return o.slice(0,3); }
+function insTrend(S){ const o=[]; const sp=(S.metaAds_spend||[]).map(p=>p.value), rc=(S.instagram_reach||[]).map(p=>p.value);
+  if(sp.length){ const mx=Math.max(...sp),i=sp.indexOf(mx); o.push(`Pico de inversión: <b>día ${(S.metaAds_spend[i].date||'').slice(8)||i+1}</b>, $${esMX(Math.round(mx))}.`);
+    const z=sp.map((v,i)=>v===0?i+1:0).filter(Boolean); if(z.length) o.push(`Sin inversión los días <b>${compressDays(z)}</b> — pauta apagada.`); }
+  if(rc.length){ const mx=Math.max(...rc),i=rc.indexOf(mx); o.push(`Mejor día de alcance orgánico: <b>día ${(S.instagram_reach[i].date||'').slice(8)||i+1}</b> (${esMX(mx)}).`); }
+  return o; }
+function insRedes(D,P){ const o=[],ig=D.instagram||{},fb=D.facebook||{};
+  if(P&&P.instagram){ o.push(`Instagram: <b>${(ig.net>=0?'+':'')+esMX(ig.net)} seguidores</b> netos (previo ${(P.instagram.net>=0?'+':'')+esMX(P.instagram.net)}).`);
+    const r=pctRaw(num(ig.reach),num(P.instagram.reach)||1); if(r<0)o.push(`Alcance orgánico ${signPct(r)}, siguiendo el ritmo de la pauta.`); }
+  else o.push(`Instagram: <b>${(ig.net>=0?'+':'')+esMX(ig.net)}</b> seguidores netos y ${esMX(ig.reach)} de alcance.`);
+  o.push(`Facebook: <b>${esMX(fb.interactions)} interacciones</b> en el período.`);
+  return o.slice(0,3); }
+function renderAn(id,items,slim){ const el=document.getElementById(id); if(!el)return;
+  if(!items||!items.length){el.hidden=true;el.innerHTML='';return;} el.hidden=false;
+  el.innerHTML = slim ? `<span class="rombo rombo--lleno"></span><span class="txt">${items[0]}</span>`
+    : `<span class="rotulo">Lo que dice la data</span><ul>${items.map(t=>`<li><span class="rombo rombo--lleno"></span><span class="txt">${t}</span></li>`).join('')}</ul>`;
+}
+
+// ── Gráficas ──
+function buildArea(el, points, unit){
+  const W=520,H=210,padL=8,padR=8,padT=16,padB=26;
+  const vals=points.map(p=>p.value), n=vals.length, max=Math.max(...vals,1);
+  const x=i=>padL+i*(W-padL-padR)/(n-1||1), y=v=>padT+(1-v/max)*(H-padT-padB);
+  let line=''; points.forEach((p,i)=>{ line+=(i?'L':'M')+x(i).toFixed(1)+' '+y(p.value).toFixed(1)+' '; });
+  const area='M'+x(0).toFixed(1)+' '+y(0).toFixed(1)+' '+line.replace(/^M/,'L')+'L'+x(n-1).toFixed(1)+' '+y(0).toFixed(1)+' Z';
+  const gy=(padT+.5*(H-padT-padB)).toFixed(1);
+  const grid=`<line class="ggrid" x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}"/>`;
+  const tickIdx=[...new Set([0,Math.floor(n*.25),Math.floor(n*.5),Math.floor(n*.75),n-1])];
+  const ticks=tickIdx.map(i=>`<text class="gtick" x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${(points[i].date||'').slice(8)||i+1}</text>`).join('');
+  const ex=x(n-1).toFixed(1),ey=y(vals[n-1]).toFixed(1);
+  const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" preserveAspectRatio="xMidYMid meet">
+    ${grid}<text class="gtick" x="${padL}" y="${padT-4}" text-anchor="start">${esMX(Math.round(max))}</text>
+    <path class="garea" d="${area}"/><path class="gline" d="${line}"/>
+    <line class="gbase" x1="${padL}" y1="${y(0).toFixed(1)}" x2="${W-padR}" y2="${y(0).toFixed(1)}"/>
+    ${ticks}<rect x="${ex-3.2}" y="${ey-3.2}" width="6.4" height="6.4" fill="var(--hueso)" transform="rotate(45 ${ex} ${ey})"/>
+    <line class="gcursor" x1="0" y1="${padT}" x2="0" y2="${H-padB}"/><circle r="3.5" fill="var(--hueso)" opacity="0" class="gdot"/></svg>`;
+  el.querySelector('svg')?.remove(); el.insertAdjacentHTML('beforeend', svg);
+  const g=el.querySelector('svg'),cur=g.querySelector('.gcursor'),dot=g.querySelector('.gdot'),tip=$('#tip');
+  g.addEventListener('pointermove',e=>{ const r=g.getBoundingClientRect(); let i=Math.round(((e.clientX-r.left)/r.width*W-padL)/((W-padL-padR)/(n-1||1)));
+    i=Math.max(0,Math.min(n-1,i)); const cx=x(i),cy=y(vals[i]);
+    cur.setAttribute('x1',cx);cur.setAttribute('x2',cx);cur.style.opacity=.5; dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.style.opacity=1;
+    const d=parseISO(points[i].date), lbl=d?`${d.getDate()} ${MESES[d.getMonth()].slice(0,3)}`:i+1;
+    tip.innerHTML=`<b>${unit==='money'?'$'+esMX(Math.round(vals[i])):esMX(vals[i])}</b> · ${lbl}`;
+    tip.style.left=e.clientX+'px'; tip.style.top=(r.top+cy*r.height/H)+'px'; tip.style.opacity=1; });
+  g.addEventListener('pointerleave',()=>{cur.style.opacity=0;dot.style.opacity=0;tip.style.opacity=0;});
+}
+
+// ── Lectura ──
+const LECTURA_AMANCAY_AGO = `
+<p><span class="en">Agosto cerró con menos volumen y mejor eficiencia en Meta.</span> La inversión se sostuvo en <b>$38,981</b>, pero el alcance cayó <b>38%</b> mientras la frecuencia subió a <b>2.26</b>: la misma gente vio el anuncio más veces. A cambio, el CTR mejoró de 1.02% a <b>1.49%</b> y el clic bajó a <b>$20.56</b>.</p>
+<p><span class="en">Google Ads se replegó.</span> Las impresiones cayeron de 61,837 a <b>11,096</b> y los clics de 3,147 a <b>925</b> con el presupuesto casi igual, lo que disparó el costo por clic de $5.18 a <b>$17.25</b>. Revisar pausa de campañas o pujas.</p>
+<p><span class="en">Pendiente antes de octubre:</span> no hay conversiones registradas en ninguna plataforma. Hoy medimos clics, no leads. Con el seguimiento instalado, el próximo reporte puede dar <b>costo por lead real</b>.</p>
+<p><span class="en">En orgánico, Instagram sumó 24 seguidores netos</span> y sostiene una base sana. El alcance orgánico bajó junto con el de pauta, algo esperable en un mes de menor volumen.</p>`;
+function lecturaFor(brand,from,status){
+  if(status!=='live' && brand==='amancay' && from.slice(0,7)==='2026-08') return LECTURA_AMANCAY_AGO;
+  return `<p>La lectura del mes la redacta Sentido al cierre del período —el análisis que conecta los números con lo que hay que hacer—. Arriba tienes ya las observaciones concretas de cada bloque. <span class="en">Pídemela para este rango cuando quieras.</span></p>`;
+}
+
+// ── Orquestación ──
+let RANGE = {from:null,to:null};
+function setBanner(status){
+  const b=$('#banner');
+  if(status==='demo'){ b.hidden=false; b.innerHTML='<span class="rombo"></span><span><b>Datos de ejemplo</b> (Amancay, agosto 2026). Conecta Metricool en Vercel para ver datos en vivo de cualquier rango.</span>'; }
+  else if(status==='nodata'){ b.hidden=false; b.innerHTML='<span class="rombo"></span><span>Sin datos para este rango. Conecta Metricool en Vercel o elige otro período.</span>'; }
+  else b.hidden=true;
+}
+function showSections(on){ ['sec-pauta','sec-trend','sec-redes','sec-lectura'].forEach(id=>$('#'+id).hidden=!on); $('#kpis').hidden=!on; }
+
+async function refresh(){
+  $('#cargando').hidden=false; $('#cuerpo').style.opacity=.4;
+  const cmp = $('#cmp').checked;
+  const [pf,pt] = prevPeriod(RANGE.from, RANGE.to);
+  const [cur, prev] = await Promise.all([ loadData(BRAND,RANGE.from,RANGE.to), cmp?loadData(BRAND,pf,pt):Promise.resolve({status:'off'}) ]);
+  if(cur.status==='auth') return;
+  $('#cargando').hidden=true; $('#cuerpo').style.opacity=1;
+  $('#rango-label').textContent = rangeLabel(RANGE.from,RANGE.to);
+
+  setBanner(cur.status);
+  if(cur.status==='nodata'){ showSections(false); return; }
+  showSections(true);
+
+  const D = cur.data.data, S = cur.data.series||{};
+  const P = (prev.status==='live'||prev.status==='demo') ? prev.data.data : null;
+  $('#brand-name').textContent = cur.data.brand || cap(BRAND);
+
+  renderKPIs(D,P);
+  ['metaAds','googleAds','instagram','facebook'].forEach(net=>renderCol(net,D,P));
+  renderAn('an-kpi', insKPI(D,P), true);
+  renderAn('an-pauta', insPauta(D,P));
+  renderAn('an-redes', insRedes(D,P));
+
+  const hasSeries = (S.metaAds_spend&&S.metaAds_spend.length) || (S.instagram_reach&&S.instagram_reach.length);
+  $('#sec-trend').hidden = !hasSeries;
+  if(hasSeries){
+    if(S.metaAds_spend&&S.metaAds_spend.length){ buildArea($('#grafo-spend'),S.metaAds_spend,'money');
+      $('#gsub-spend').textContent = 'Total del período · $'+esMX(Math.round(D.metaAds.spend))+' MXN'; }
+    if(S.instagram_reach&&S.instagram_reach.length){ buildArea($('#grafo-reach'),S.instagram_reach,'int');
+      $('#gsub-reach').textContent = 'Cuentas alcanzadas · '+esMX(D.instagram.reach); }
+    renderAn('an-trend', insTrend(S));
+  }
+  $('#lectura-cuerpo').innerHTML = lecturaFor(BRAND, RANGE.from, cur.status);
+  $('#fnota').innerHTML = `Reporte del ${rangeLabel(RANGE.from,RANGE.to)} · Documento privado, solo para ${cur.data.brand||cap(BRAND)} · Sentido desde 2010.`;
+}
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+
+// ── Controles ──
+const panel=$('#rango-panel'), btn=$('#rango-btn');
+btn.addEventListener('click',()=>{ const o=!panel.hidden; panel.hidden=o; btn.setAttribute('aria-expanded',String(!o)); });
+document.addEventListener('click',e=>{ if(!e.target.closest('.selrango')){ panel.hidden=true; btn.setAttribute('aria-expanded','false'); } });
+$('#presets').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+  const [f,t]=presetRange(b.dataset.k); RANGE={from:f,to:t}; $('#c-from').value=f; $('#c-to').value=t;
+  $('#presets').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+}));
+$('#aplicar').addEventListener('click',()=>{
+  const f=$('#c-from').value,t=$('#c-to').value;
+  if(f&&t){ RANGE = f<=t?{from:f,to:t}:{from:t,to:f}; }
+  panel.hidden=true; btn.setAttribute('aria-expanded','false'); refresh();
+});
+$('#imprimir').addEventListener('click',()=>window.print());
+
+// ── Init ── default: mes pasado
+(function init(){
+  const [f,t]=presetRange('mes-pasado'); RANGE={from:f,to:t};
+  $('#c-from').value=f; $('#c-to').value=t;
+  $('#presets').querySelector('[data-k="mes-pasado"]').setAttribute('aria-pressed','true');
+  refresh();
+})();
+</script>
+</body>
+</html>

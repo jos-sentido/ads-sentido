@@ -1,0 +1,237 @@
+/* ═══════════════════════════════════════════════════════════════
+   ads.sentido.mx — Panel interno de resultados
+   Sistema visual estricto de Sentido: tinta + hueso, Archivo,
+   buril como material, rombo como módulo. Sin color, sin tarjetas.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Archivo variable, auto-hospedada (sin Google Fonts en runtime) */
+@font-face{
+  font-family:'Archivo';font-style:normal;font-weight:100 900;font-stretch:75% 125%;
+  font-display:swap;src:url(./fonts/archivo-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Archivo';font-style:normal;font-weight:100 900;font-stretch:75% 125%;
+  font-display:swap;src:url(./fonts/archivo-latin-ext.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+:root{
+  --tinta:#0A0A0A; --tinta-2:#111111; --tinta-3:#161616; --tinta-4:#1A1A1A;
+  --hueso:#F1EADC; --hueso-2:#B6AE9E; --hueso-3:#948C80; --hueso-4:#898275;
+  --linea:#202020; --linea-2:#2E2E2E;
+  --err:#E0A79C; --err-borde:#B4655A;
+  --ancho:1300px; --lectura:780px;
+  --gutter:clamp(20px,3.4vw,48px);
+  --sec:clamp(56px,7vw,104px);
+  --ease:cubic-bezier(.22,.75,.20,1);
+  --archivo:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--tinta);color:var(--hueso-2);font-family:var(--archivo);
+  font-size:1.0625rem;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{color:var(--hueso);margin:0;line-height:1;letter-spacing:-.032em;text-wrap:balance;font-weight:800}
+a{color:inherit}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+[hidden]{display:none!important}
+
+.wrap{max-width:var(--ancho);margin:0 auto;padding-inline:var(--gutter)}
+
+/* ── Primitivas de marca ── */
+.rotulo{font-size:.6875rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--hueso-3);line-height:1}
+.pleca{height:4px;width:56px;background:repeating-linear-gradient(90deg,var(--hueso) 0 2px,transparent 2px 6px);opacity:.45;margin-bottom:20px}
+.rombo{width:7px;height:7px;border:1px solid var(--hueso-3);transform:rotate(45deg);display:inline-block}
+.rombo--lleno{background:var(--hueso);border-color:var(--hueso)}
+/* El ojo grabado: trama de buril enmascarada por la silueta del isotipo, para
+   que la marca se lea como grabado y no como PNG negro perdido en el fondo. */
+.ojo{width:30px;height:30px;flex:0 0 auto;
+  background-image:repeating-linear-gradient(92deg,#F1EADC 0 1.15px,rgba(241,234,220,.34) 1.15px 2.3px);
+  -webkit-mask:url(/assets/isotipo-sentido.png) center/contain no-repeat;
+  mask:url(/assets/isotipo-sentido.png) center/contain no-repeat}
+.buril{position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(var(--ang,90deg),var(--trazo,#F1EADC) 0 var(--peso,.6px),transparent var(--peso,.6px) var(--paso,5px));
+  opacity:var(--tono,.05)}
+
+/* ── Barra ── */
+.barra{display:flex;align-items:center;gap:clamp(16px,3vw,40px);flex-wrap:wrap;min-height:80px;
+  padding-block:20px;border-bottom:1px solid var(--linea)}
+.marca{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.marca img{height:34px;width:auto;display:block}
+.cliente{display:flex;flex-direction:column;gap:7px;flex:1 1 auto;min-width:120px}
+.cliente h2{font-size:clamp(1.5rem,2.6vw,2rem)}
+
+/* ── Controles: selector de rango tipo Swydo ── */
+.controles{display:flex;gap:12px;align-items:center;flex-wrap:wrap;flex:0 0 auto}
+.selrango{position:relative}
+.selrango>button{appearance:none;cursor:pointer;font-family:inherit;background:transparent;
+  border:1px solid var(--linea-2);color:var(--hueso-2);padding:11px 16px;display:flex;gap:12px;align-items:center;
+  font-size:.8125rem;letter-spacing:.02em;transition:border-color .3s var(--ease)}
+.selrango>button:hover{border-color:var(--hueso-4)}
+.selrango>button .cal{color:var(--hueso-4)}
+.selrango>button .rng{font-variant-numeric:tabular-nums;color:var(--hueso)}
+.panelrango{position:absolute;top:calc(100% + 8px);right:0;z-index:40;width:min(340px,90vw);
+  background:var(--tinta-2);border:1px solid var(--linea-2);padding:18px}
+.panelrango .rotulo{margin-bottom:12px;display:block}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.presets button{appearance:none;cursor:pointer;font-family:inherit;background:transparent;border:1px solid var(--linea);
+  color:var(--hueso-3);padding:8px 12px;font-size:.75rem;letter-spacing:.02em;transition:.25s var(--ease)}
+.presets button:hover{color:var(--hueso);border-color:var(--hueso-4)}
+.presets button[aria-pressed="true"]{background:var(--hueso);color:var(--tinta);border-color:var(--hueso)}
+.custom{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:14px;border-top:1px solid var(--linea)}
+.custom label{display:flex;flex-direction:column;gap:6px;font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--hueso-4)}
+.custom input{font-family:inherit;background:var(--tinta-3);border:1px solid var(--linea-2);color:var(--hueso);padding:9px 10px;font-size:.8125rem}
+.cmp{margin-top:14px;display:flex;align-items:center;gap:10px;font-size:.8125rem;color:var(--hueso-3)}
+.cmp input{accent-color:var(--hueso)}
+
+.btn{appearance:none;cursor:pointer;font-family:inherit;font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;padding:12px 20px;background:var(--hueso);color:var(--tinta);border:0;box-shadow:0 2px 0 0 var(--hueso-4);
+  transition:box-shadow .15s var(--ease),transform .15s var(--ease)}
+.btn:hover{box-shadow:0 4px 0 0 var(--hueso-4)}
+.btn:active{box-shadow:0 1px 0 0 var(--hueso-4);transform:translateY(1px)}
+.btn--fantasma{background:transparent;color:var(--hueso-2);border:1px solid var(--linea-2);box-shadow:none}
+.btn--fantasma:hover{border-color:var(--hueso-4);box-shadow:none}
+
+/* ── Banner (estado de datos) ── */
+.banner{display:flex;align-items:center;gap:12px;padding:12px 16px;margin-top:20px;
+  background:var(--tinta-2);border-left:2px solid var(--hueso-4);font-size:.875rem;color:var(--hueso-3)}
+.banner b{color:var(--hueso-2);font-weight:600}
+.banner .rombo{flex:0 0 auto}
+
+/* ── Secciones ── */
+section{padding-block:var(--sec)}
+section+section{border-top:1px solid var(--linea)}
+.cab{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:44px}
+.cab h3{font-size:clamp(1.375rem,2.2vw,1.875rem)}
+.cab .meta-nota{font-size:.9375rem;color:var(--hueso-3);max-width:36ch;text-align:right}
+
+/* ── KPIs: plancha de renglones ── */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr)}
+.kpi{padding:4px 28px;border-left:1px solid var(--linea)}
+.kpi:first-child{padding-left:0;border-left:0}
+.kpi .rotulo{margin-bottom:16px}
+.kpi .cifra{font-size:clamp(2rem,3.4vw,2.9rem);font-weight:800;color:var(--hueso);line-height:.95;letter-spacing:-.032em}
+.kpi .cifra .cur{font-weight:300;font-size:.55em;color:var(--hueso-3);margin-right:.12em;vertical-align:.06em}
+.kpi .pie{margin-top:14px;display:flex;align-items:center;gap:10px;min-height:20px}
+.delta{display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--hueso-2)}
+.delta .arw{color:var(--hueso-3);font-size:.7rem}
+.delta .vs{color:var(--hueso-4);font-weight:400;letter-spacing:.04em}
+
+/* ── Columnas con regla ── */
+.cols{display:grid;grid-template-columns:1fr 1fr}
+.col{padding:0 clamp(20px,3vw,48px);border-left:1px solid var(--linea)}
+.col:first-child{padding-left:0;border-left:0}
+.col-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--linea)}
+.col-cab h4{font-size:1.3125rem;color:var(--hueso)}
+.col-cab .fuente{font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--hueso-4)}
+.renglon{display:grid;grid-template-columns:1fr auto auto;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid var(--linea)}
+.renglon:last-child{border-bottom:0}
+.renglon .et{color:var(--hueso-3);font-size:.9375rem}
+.renglon .val{color:var(--hueso);font-weight:600;font-size:1.0625rem;font-variant-numeric:tabular-nums;text-align:right;min-width:90px}
+.renglon .dl{text-align:right;min-width:74px}
+.aviso{margin-top:22px;padding:14px 16px;border:1px solid var(--linea-2);display:flex;gap:12px;align-items:flex-start}
+.aviso .rombo{margin-top:6px;flex:0 0 auto;border-color:var(--err-borde)}
+.aviso p{margin:0;font-size:.875rem;color:var(--hueso-3);line-height:1.5}
+.aviso b{color:var(--hueso-2);font-weight:600}
+
+/* ── Tendencia ── */
+.trend{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px)}
+.grafo{position:relative}
+.grafo h4{font-size:1.125rem;color:var(--hueso);margin-bottom:4px}
+.grafo .gsub{font-size:.8125rem;color:var(--hueso-4);margin-bottom:20px}
+.grafo svg{width:100%;height:auto;display:block;overflow:visible}
+.gline{fill:none;stroke:var(--hueso-2);stroke-width:1.6}
+.garea{fill:var(--hueso);opacity:.06}
+.ggrid{stroke:var(--linea);stroke-width:1}
+.gbase{stroke:var(--linea-2);stroke-width:1}
+.gtick{fill:var(--hueso-4);font-size:10px;font-weight:700;letter-spacing:.1em}
+.gcursor{stroke:var(--hueso-3);stroke-width:1;stroke-dasharray:2 3;opacity:0}
+.tip{position:fixed;pointer-events:none;background:var(--tinta-2);border:1px solid var(--linea-2);padding:8px 11px;
+  font-size:.75rem;color:var(--hueso-2);opacity:0;transform:translate(-50%,-115%);white-space:nowrap;transition:opacity .12s;z-index:50}
+.tip b{color:var(--hueso);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ── Análisis (Nivel 1: callouts computados) ── */
+.analisis{margin-top:44px;background:var(--tinta-2);padding:24px clamp(20px,3vw,32px);border-left:2px solid var(--hueso-4)}
+.analisis>.rotulo{display:block;margin-bottom:18px}
+.analisis ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.analisis li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.analisis li .rombo{margin-top:7px}
+.analisis li .txt{color:var(--hueso-2);font-size:.9375rem;line-height:1.55;max-width:66ch}
+.analisis li .txt b{color:var(--hueso);font-weight:600;font-variant-numeric:tabular-nums}
+.an-kpi-slim{margin-top:34px;padding-top:22px;border-top:1px solid var(--linea);display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;max-width:80ch}
+.an-kpi-slim .rombo{margin-top:7px}
+.an-kpi-slim .txt{color:var(--hueso-2);font-size:1rem;line-height:1.55}
+.an-kpi-slim .txt b{color:var(--hueso);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ── Papel: lectura ── */
+.papel{--tinta:#F1EADC;--tinta-2:#E8E0D0;--tinta-3:#DED5C2;--tinta-4:#D5CBB6;
+  --hueso:#0A0A0A;--hueso-2:#2E2A24;--hueso-3:#514B42;--hueso-4:#5C564C;--linea:#D8CFBC;--linea-2:#C4B9A2;
+  background:var(--tinta);color:var(--hueso-2);margin-inline:calc(-1*var(--gutter));padding-inline:var(--gutter)}
+.papel .pleca{background:repeating-linear-gradient(90deg,var(--hueso) 0 2px,transparent 2px 6px)}
+.lectura{max-width:var(--lectura)}
+.lectura h3{color:var(--hueso);font-size:clamp(1.5rem,2.4vw,2rem);margin-bottom:8px}
+.lectura .firma{font-size:.6875rem;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--hueso-3);margin-bottom:32px}
+.lectura p{color:var(--hueso-2);margin:0 0 20px;max-width:68ch}
+.lectura p b,.lectura p .en{color:var(--hueso);font-weight:600}
+.lectura p:last-child{margin-bottom:0}
+
+/* ── Pie ── */
+footer{border-top:1px solid var(--linea);padding-block:44px;display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
+footer .fm{display:flex;align-items:center;gap:14px}
+footer .fm img.nom{height:26px;width:auto;opacity:.9}
+footer .fm img.iso{height:30px;width:auto;opacity:.7}
+footer .fnota{font-size:.75rem;color:var(--hueso-4);line-height:1.7;text-align:right;max-width:42ch}
+
+/* ── Login ── */
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;position:relative;overflow:hidden}
+.login-caja{width:min(400px,100%);position:relative;z-index:2}
+.login-caja .marca{justify-content:center;margin-bottom:36px}
+.login-caja .marca img{height:40px}
+.login-caja h1{font-size:1.875rem;text-align:center;margin-bottom:6px}
+.login-caja .sub{text-align:center;color:var(--hueso-3);font-size:.9375rem;margin:0 0 32px}
+.login-form{display:flex;flex-direction:column;gap:14px}
+.login-form input{font-family:inherit;background:var(--tinta-3);border:1px solid var(--linea-2);color:var(--hueso);padding:14px 16px;font-size:1rem}
+.login-form input:focus{outline:2px solid var(--hueso-4);outline-offset:1px}
+.login-form .btn{width:100%;justify-content:center;text-align:center;padding:15px}
+.login-err{color:var(--err);font-size:.875rem;text-align:center;min-height:20px}
+
+/* ── Índice de marcas ── */
+.indice{padding-block:var(--sec)}
+.indice .plancha{display:flex;flex-direction:column;border-top:1px solid var(--linea)}
+.indice .renglon-marca{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:20px;
+  padding:22px 4px;border-bottom:1px solid var(--linea);text-decoration:none;position:relative;transition:padding-left .3s var(--ease)}
+.indice .renglon-marca:hover{padding-left:16px}
+.indice .renglon-marca .nom{color:var(--hueso);font-size:1.3125rem;font-weight:800;letter-spacing:-.03em}
+.indice .renglon-marca .redes{color:var(--hueso-4);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.indice .renglon-marca .flecha{color:var(--hueso-3);font-size:1.1rem}
+
+/* ── Estados de carga ── */
+.cargando{padding:80px 0;text-align:center;color:var(--hueso-4);font-size:.9375rem;letter-spacing:.02em}
+
+@media (max-width:900px){
+  .kpis{grid-template-columns:1fr 1fr;gap:8px 0}
+  .kpi{padding:18px 22px;border-top:1px solid var(--linea)}
+  .kpi:nth-child(-n+2){border-top:0}
+  .kpi:nth-child(odd){padding-left:0;border-left:0}
+  .cols{grid-template-columns:1fr}
+  .col{padding:0;border-left:0}
+  .col+.col{margin-top:40px;padding-top:40px;border-top:1px solid var(--linea)}
+  .trend{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .kpis{grid-template-columns:1fr}
+  .kpi{padding:20px 0;border-left:0;border-top:1px solid var(--linea)}
+  .kpi:first-child{border-top:0}
+  .controles{width:100%}
+  .selrango{flex:1}
+  .selrango>button{width:100%;justify-content:space-between}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ── Impresión (para el PDF del mes) ── */
+@media print{
+  body{background:#fff;color:#000}
+  .controles,.no-print{display:none!important}
+  section{break-inside:avoid}
+}

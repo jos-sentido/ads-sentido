@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel Sentido</title>
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<link rel="stylesheet" href="/assets/panel.css">
+</head>
+<body>
+
+<!-- ── Login ── -->
+<section class="login-wrap" id="view-login" hidden>
+  <div class="buril" style="--tono:.05;--paso:6px"></div>
+  <div class="login-caja">
+    <div class="marca"><img src="/assets/logo-sentido-light.png" alt="Sentido"></div>
+    <h1>Resultados</h1>
+    <p class="sub">Panel interno de pauta y redes</p>
+    <form class="login-form" id="form">
+      <input type="password" id="pw" placeholder="Contraseña" autocomplete="current-password" aria-label="Contraseña" required>
+      <button class="btn" type="submit" id="entrar">Entrar</button>
+      <div class="login-err" id="err" role="alert"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ── Índice de clientes ── -->
+<div id="view-index" hidden>
+  <div class="wrap">
+    <header class="barra">
+      <div class="marca">
+        <img src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+        <span class="ojo" aria-hidden="true"></span>
+      </div>
+      <div class="cliente">
+        <span class="rotulo">Panel interno</span>
+        <h2>Resultados</h2>
+      </div>
+      <div class="controles">
+        <button class="btn--fantasma btn" id="logout" type="button">Salir</button>
+      </div>
+    </header>
+
+    <main class="indice">
+      <div class="pleca"></div>
+      <span class="rotulo">Clientes</span>
+      <div class="plancha" id="lista" style="margin-top:20px"></div>
+    </main>
+
+    <footer>
+      <div class="fm">
+        <span class="ojo" aria-hidden="true"></span>
+        <img class="nom" src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+      </div>
+      <p class="fnota">Documento privado · Sentido, branding &amp; advertising desde 2010.</p>
+    </footer>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+
+function showLogin(){ $('#view-login').hidden = false; $('#view-index').hidden = true; $('#pw').focus(); }
+function showIndex(brands){
+  $('#view-login').hidden = true; $('#view-index').hidden = false;
+  $('#lista').innerHTML = brands.map(b =>
+    `<a class="renglon-marca" href="/${b.slug}">
+       <span class="nom">${b.label}</span>
+       <span class="redes">Pauta · Redes</span>
+       <span class="flecha" aria-hidden="true">→</span>
+     </a>`).join('') || '<p class="cargando">Aún no hay clientes configurados.</p>';
+}
+
+async function boot(){
+  try{
+    const s = await fetch('/api/session').then(r => r.json());
+    if(s.authed) showIndex(s.brands); else showLogin();
+  }catch{ showLogin(); }
+}
+
+$('#form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('#entrar'), err = $('#err');
+  err.textContent = ''; btn.disabled = true; btn.textContent = 'Entrando…';
+  try{
+    const r = await fetch('/api/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: $('#pw').value })
+    });
+    if(r.ok){ await boot(); }
+    else { err.textContent = 'Contraseña incorrecta'; $('#pw').select(); }
+  }catch{ err.textContent = 'Error de red. Intenta de nuevo.'; }
+  finally{ btn.disabled = false; btn.textContent = 'Entrar'; }
+});
+
+$('#logout').addEventListener('click', async () => {
+  await fetch('/api/logout', { method: 'POST' }).catch(()=>{});
+  showLogin();
+});
+
+boot();
+</script>
+</body>
+</html>

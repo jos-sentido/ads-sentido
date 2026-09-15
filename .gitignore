@@ -1,0 +1,13 @@
+# Node
+node_modules/
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# Sistema
+.DS_Store
+*.swp
+*.tmp
+*.bak

@@ -65,8 +65,17 @@ export default async function handler(req, res) {
   const mc = (path, extra = {}) => fetchMetricool(path, { blogId: b.blogId, userId, userToken, start, end, ...extra });
 
   try {
-    if (debug === 'timeline' && metric) {
-      return res.status(200).json({ metric, raw: await mc(`/stats/timeline/${metric}`) });
+    // Modo diagnóstico: prueba timeline + aggregation para confirmar de dónde
+    // sale el dato bueno y en qué formato (esta sandbox no alcanza Metricool).
+    if (debug) {
+      const m = metric || 'FAEV04';
+      const safe = async p => { try { return await mc(p); } catch (e) { return { error: String(e && e.message || e) }; } };
+      return res.status(200).json({
+        range: { start, end }, blogId: b.blogId, metric: m,
+        timeline: await safe(`/stats/timeline/${m}`),
+        aggregation: await safe(`/stats/aggregation/${m}`),
+        distribution: await safe(`/stats/distribution/${m}`),
+      });
     }
 
     const jobs = [];
@@ -112,10 +121,19 @@ function extractSeries(raw) {
   const arr = Array.isArray(raw) ? raw
     : Array.isArray(raw && raw.data) ? raw.data
     : Array.isArray(raw && raw.values) ? raw.values : [];
-  return arr.map(p => ({
-    date: p.date || p.dateTime || (p.day && p.day.date) || null,
-    value: Number(p.value != null ? p.value : (Array.isArray(p.values) ? p.values[0] : p)) || 0,
-  }));
+  return arr.map(p => {
+    // Metricool devuelve pares ["YYYYMMDD","valor"].
+    if (Array.isArray(p)) return { date: normDate(p[0]), value: Number(p[1]) || 0 };
+    return {
+      date: normDate(p.date || p.dateTime || (p.day && p.day.date) || null),
+      value: Number(p.value != null ? p.value : (Array.isArray(p.values) ? p.values[0] : p)) || 0,
+    };
+  });
+}
+function normDate(s) {
+  if (!s) return null;
+  const m = String(s).match(/^(\d{4})(\d{2})(\d{2})$/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : String(s).slice(0, 10);
 }
 
 const sum = a => a.reduce((s, v) => s + (Number(v) || 0), 0);

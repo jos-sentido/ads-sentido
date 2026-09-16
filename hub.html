@@ -311,7 +311,7 @@ let RANGE = {from:null,to:null};
 function setBanner(status){
   const b=$('#banner');
   if(status==='demo'){ b.hidden=false; b.innerHTML='<span class="rombo"></span><span><b>Datos de ejemplo</b> (Amancay, agosto 2026). Conecta Metricool en Vercel para ver datos en vivo de cualquier rango.</span>'; }
-  else if(status==='nodata'){ b.hidden=false; b.innerHTML='<span class="rombo"></span><span>Sin datos para este rango. Conecta Metricool en Vercel o elige otro período.</span>'; }
+  else if(status==='nodata'){ b.hidden=false; b.innerHTML='<span class="rombo"></span><span>Este rango aún no está cargado. Por ahora elige un <b>mes completo</b> (ej. "Mes pasado"). El rango libre se habilita con la carga diaria.</span>'; }
   else b.hidden=true;
 }
 function showSections(on){ ['sec-pauta','sec-trend','sec-redes','sec-lectura'].forEach(id=>$('#'+id).hidden=!on); $('#kpis').hidden=!on; }

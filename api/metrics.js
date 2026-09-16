@@ -68,25 +68,24 @@ export default async function handler(req, res) {
     // Modo diagnóstico: prueba varios endpoints candidatos a la vez para
     // encontrar cuál devuelve las métricas de Data Studio (FAEV/GAEV/IGEV).
     if (debug) {
-      const m = metric || 'FAEV04';
-      const tz = 'America/Mexico_City';
-      const fromISO = String(req.query.from || ''), toISO = String(req.query.to || '');
-      const tryUrl = async (path, params) => {
-        const qs = new URLSearchParams({ blogId: b.blogId, userId, userToken, ...params });
+      const fromISO = `${req.query.from}T00:00:00-06:00`;
+      const toISO = `${req.query.to}T23:59:59-06:00`;
+      const tryUrl = async (path) => {
+        const qs = new URLSearchParams({ from: fromISO, to: toISO, blogId: b.blogId, userId, userToken, integrationSource: 'MCP' });
         try {
           const r = await fetch(`${API}${path}?${qs}`, { headers: { 'X-Mc-Auth': userToken, 'Accept': 'application/json' } });
           const t = await r.text();
-          return { path, status: r.status, sample: t.slice(0, 220) };
+          return { path, status: r.status, sample: t.slice(0, 400) };
         } catch (e) { return { path, error: String(e && e.message || e) }; }
       };
       const results = await Promise.all([
-        tryUrl(`/v2/analytics/timelines/${m}`, { from: fromISO, to: toISO, timezone: tz }),
-        tryUrl(`/v2/analytics/facebookAds/timelines/${m}`, { from: fromISO, to: toISO, timezone: tz }),
-        tryUrl(`/v2/analytics/timelines/facebookAds`, { metric: m, from: fromISO, to: toISO, timezone: tz }),
-        tryUrl(`/v2/analytics/evolution/${m}`, { from: fromISO, to: toISO, timezone: tz }),
-        tryUrl(`/stats/timeline/${m}`, { start, end }),
+        tryUrl('/v2/analytics/evolution/facebookAds'),
+        tryUrl('/v2/analytics/evolution/metaAds'),
+        tryUrl('/v2/analytics/evolution/googleAds'),
+        tryUrl('/v2/analytics/timeline/facebookAds'),
+        tryUrl('/v2/analytics/posts/facebook'),
       ]);
-      return res.status(200).json({ metric: m, results });
+      return res.status(200).json({ from: fromISO, to: toISO, results });
     }
 
     const jobs = [];

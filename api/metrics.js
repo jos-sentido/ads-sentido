@@ -65,17 +65,28 @@ export default async function handler(req, res) {
   const mc = (path, extra = {}) => fetchMetricool(path, { blogId: b.blogId, userId, userToken, start, end, ...extra });
 
   try {
-    // Modo diagnóstico: prueba timeline + aggregation para confirmar de dónde
-    // sale el dato bueno y en qué formato (esta sandbox no alcanza Metricool).
+    // Modo diagnóstico: prueba varios endpoints candidatos a la vez para
+    // encontrar cuál devuelve las métricas de Data Studio (FAEV/GAEV/IGEV).
     if (debug) {
       const m = metric || 'FAEV04';
-      const safe = async p => { try { return await mc(p); } catch (e) { return { error: String(e && e.message || e) }; } };
-      return res.status(200).json({
-        range: { start, end }, blogId: b.blogId, metric: m,
-        timeline: await safe(`/stats/timeline/${m}`),
-        aggregation: await safe(`/stats/aggregation/${m}`),
-        distribution: await safe(`/stats/distribution/${m}`),
-      });
+      const tz = 'America/Mexico_City';
+      const fromISO = String(req.query.from || ''), toISO = String(req.query.to || '');
+      const tryUrl = async (path, params) => {
+        const qs = new URLSearchParams({ blogId: b.blogId, userId, userToken, ...params });
+        try {
+          const r = await fetch(`${API}${path}?${qs}`, { headers: { 'X-Mc-Auth': userToken, 'Accept': 'application/json' } });
+          const t = await r.text();
+          return { path, status: r.status, sample: t.slice(0, 220) };
+        } catch (e) { return { path, error: String(e && e.message || e) }; }
+      };
+      const results = await Promise.all([
+        tryUrl(`/v2/analytics/timelines/${m}`, { from: fromISO, to: toISO, timezone: tz }),
+        tryUrl(`/v2/analytics/facebookAds/timelines/${m}`, { from: fromISO, to: toISO, timezone: tz }),
+        tryUrl(`/v2/analytics/timelines/facebookAds`, { metric: m, from: fromISO, to: toISO, timezone: tz }),
+        tryUrl(`/v2/analytics/evolution/${m}`, { from: fromISO, to: toISO, timezone: tz }),
+        tryUrl(`/stats/timeline/${m}`, { start, end }),
+      ]);
+      return res.status(200).json({ metric: m, results });
     }
 
     const jobs = [];

@@ -1,17 +1,25 @@
-// /api/metrics — Sirve la analítica del panel desde el snapshot de datos reales
-// de Metricool (api/_data.js), que se regenera con el job programado a través
-// del conector de Metricool (más confiable que la API pública fragmentada).
+// /api/metrics — Sirve la analítica del panel agregando CUALQUIER rango de
+// fechas desde series DIARIAS reales de Metricool (api/_data.js), que se
+// regeneran con el job programado a través del conector de Metricool.
 //
-// El diseño sigue siendo AGNÓSTICO DE FUENTE: mañana el snapshot puede venir de
-// un cron con el conector, de Meta Ads nativo, o de la API REST — la función y
-// el front no cambian.
+// Diseño agnóstico de fuente: el snapshot puede venir del conector, de un cron,
+// de Meta Ads nativo o de REST — la función y el front no cambian.
 //
-// ── Variables de entorno ──  METRICOOL_* ya no se usan aquí; solo PANEL_TOKEN.
-//
-// ── Contrato ──  GET /api/metrics?brand=amancay&from=2026-08-01&to=2026-08-31
-//   Devuelve el período (mes) que cae dentro del rango, con razones calculadas.
+// ── Contrato ──  GET /api/metrics?brand=amancay&from=2026-08-17&to=2026-09-15
+//   Filtra las series diarias al rango [from, to] y agrega: suma las métricas
+//   aditivas, toma el último valor de las de stock (seguidores), y calcula
+//   ctr/cpc/cpm/frecuencia. Devuelve también las series diarias del rango.
 
 import SNAP from './_data.js';
+
+// Qué métricas trae cada red (nombres normalizados que consume el front).
+const NET_KEYS = {
+  metaAds:   ['spend','impressions','clicks'],
+  googleAds: ['cost','impressions','clicks','conversions'],
+  instagram: ['followers','reach','views','gained','lost','engaged'],
+  facebook:  ['followers','interactions','pageViews','contentViews'],
+};
+const LAST = new Set(['followers']); // stock, no aditivo → último valor del rango
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -25,35 +33,50 @@ export default async function handler(req, res) {
   const snap = SNAP[slug];
   if (!snap) return res.status(404).json({ error: `Marca desconocida: ${brand}` });
 
-  const start = ymd(from), end = ymd(to);
-  if (!start || !end) return res.status(400).json({ error: 'from/to requeridos (YYYY-MM-DD)' });
+  const f = dash(from), t = dash(to);
+  if (!f || !t) return res.status(400).json({ error: 'from/to requeridos (YYYY-MM-DD)' });
+  const [lo, hi] = f <= t ? [f, t] : [t, f];
 
-  // Por ahora el snapshot es mensual: se sirve el mes que contiene el rango.
-  const monthKey = `${start.slice(0, 4)}-${start.slice(4, 6)}`;
-  const sameMonth = `${end.slice(0, 4)}-${end.slice(4, 6)}` === monthKey;
-  const period = sameMonth && snap.periods[monthKey];
-  if (!period) {
-    return res.status(404).json({ error: 'Sin datos para este rango', available: Object.keys(snap.periods) });
+  const D = snap.daily || {};
+  const inRange = arr => (arr || []).filter(p => p.date >= lo && p.date <= hi);
+  const agg = (net, key) => {
+    const pts = inRange(D[net] && D[net][key]);
+    if (!pts.length) return LAST.has(key) ? null : 0;
+    return LAST.has(key) ? pts[pts.length - 1].value : pts.reduce((s, p) => s + (Number(p.value) || 0), 0);
+  };
+
+  const data = {};
+  let any = false;
+  for (const net of Object.keys(NET_KEYS)) {
+    data[net] = {};
+    for (const key of NET_KEYS[net]) {
+      const v = agg(net, key);
+      data[net][key] = v;
+      if (v) any = true;
+    }
   }
+  if (!any) return res.status(404).json({ error: 'Sin datos para este rango', window: snap.window || null });
 
-  const data = JSON.parse(JSON.stringify(period.data));
   const m = data.metaAds, g = data.googleAds, ig = data.instagram;
-  if (m) { m.ctr = pct(m.clicks, m.impressions); m.cpc = ratio(m.spend, m.clicks); m.cpm = m.impressions ? (m.spend / m.impressions) * 1000 : null; m.frequency = ratio(m.impressions, m.reach); }
+  if (m) { m.ctr = pct(m.clicks, m.impressions); m.cpc = ratio(m.spend, m.clicks); m.cpm = m.impressions ? (m.spend / m.impressions) * 1000 : null; }
   if (g) { g.ctr = pct(g.clicks, g.impressions); g.cpc = ratio(g.cost, g.clicks); }
   if (ig) ig.net = num(ig.gained) - num(ig.lost);
 
+  const series = {
+    metaAds_spend: inRange(D.metaAds && D.metaAds.spend),
+    instagram_reach: inRange(D.instagram && D.instagram.reach),
+  };
+
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=1800');
-  return res.status(200).json({
-    brand: snap.brand, slug, from: start, to: end, updated: snap.updated,
-    data, series: period.series || {},
-  });
+  return res.status(200).json({ brand: snap.brand, slug, from: lo, to: hi, updated: snap.updated, data, series });
 }
 
 const num = v => Number(v) || 0;
 const ratio = (a, b) => (b ? a / b : null);
 const pct = (a, b) => (b ? (a / b) * 100 : null);
-function ymd(x) {
+function dash(x) {
   const s = String(x || '').trim();
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  return m ? `${m[1]}${m[2]}${m[3]}` : (/^\d{8}$/.test(s) ? s : null);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const m = s.match(/^(\d{4})(\d{2})(\d{2})$/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
 }

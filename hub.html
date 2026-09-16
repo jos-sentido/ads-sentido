@@ -192,14 +192,14 @@ function deltaHTML(cur,prev){
 const KPIS = [
   {rot:'Inversión total en pauta', f:'money',  v:d=>(num(d.metaAds&&d.metaAds.spend)+num(d.googleAds&&d.googleAds.cost))},
   {rot:'Clics a sitio',            f:'int',    v:d=>(num(d.metaAds&&d.metaAds.clicks)+num(d.googleAds&&d.googleAds.clicks))},
-  {rot:'Alcance de campañas',      f:'int',    v:d=>num(d.metaAds&&d.metaAds.reach)},
+  {rot:'Impresiones de pauta',     f:'int',    v:d=>(num(d.metaAds&&d.metaAds.impressions)+num(d.googleAds&&d.googleAds.impressions))},
   {rot:'Costo por clic promedio',  f:'money2', v:d=>{const c=num(d.metaAds&&d.metaAds.clicks)+num(d.googleAds&&d.googleAds.clicks);return c?(num(d.metaAds&&d.metaAds.spend)+num(d.googleAds&&d.googleAds.cost))/c:0;}},
 ];
 const COLS = {
   metaAds:{title:'Meta Ads', fuente:'Facebook · Instagram', rows:[
-    {k:'spend',f:'money2',et:'Inversión'},{k:'impressions',f:'int',et:'Impresiones'},{k:'reach',f:'int',et:'Alcance'},
+    {k:'spend',f:'money2',et:'Inversión'},{k:'impressions',f:'int',et:'Impresiones'},
     {k:'clicks',f:'int',et:'Clics'},{k:'ctr',f:'pct',et:'CTR'},{k:'cpc',f:'money2',et:'Costo por clic'},
-    {k:'frequency',f:'dec',et:'Frecuencia'},{k:'cpm',f:'money2',et:'CPM'}]},
+    {k:'cpm',f:'money2',et:'CPM'}]},
   googleAds:{title:'Google Ads', fuente:'Búsqueda · Display', rows:[
     {k:'cost',f:'money2',et:'Inversión'},{k:'impressions',f:'int',et:'Impresiones'},{k:'clicks',f:'int',et:'Clics'},
     {k:'ctr',f:'pct',et:'CTR'},{k:'cpc',f:'money2',et:'Costo por clic'},{k:'conversions',f:'int',et:'Conversiones'}],
@@ -244,8 +244,8 @@ function insPauta(D,P){ const o=[],m=D.metaAds||{},g=D.googleAds||{};
   if(P){ const gp=P.googleAds||{},mp=P.metaAds||{};
     if(gp.impressions){ const gi=pctRaw(num(g.impressions),num(gp.impressions));
       if(gi<-40) o.push(`<b>Google Ads: ${signPct(gi)} en impresiones</b> con inversión casi igual (${signPct(pctRaw(num(g.cost),num(gp.cost)||1))}). El clic pasó de $${(gp.cpc||0).toFixed(2)} a <b>$${(g.cpc||0).toFixed(2)}</b> — revisar pausa o pujas.`); }
-    if(mp.ctr){ const ctr=pctRaw(num(m.ctr),num(mp.ctr)),rc=pctRaw(num(m.reach),num(mp.reach)||1);
-      if(ctr>10&&rc<0) o.push(`<b>Meta: CTR ${signPct(ctr)}</b> aunque el alcance ${signPct(rc)} y la frecuencia subió a <b>${(m.frequency||0).toFixed(2)}</b>. Mejor respuesta, menos gente nueva.`); }
+    if(mp.ctr){ const ctr=pctRaw(num(m.ctr),num(mp.ctr));
+      if(ctr>10) o.push(`<b>Meta: CTR ${signPct(ctr)}</b> vs el período previo — mejor respuesta por impresión.`); }
   }
   if(g.conversions===0) o.push('Ninguna plataforma reporta <b>conversiones</b>: hoy se mide tráfico, no leads. Pendiente #1.');
   return o.slice(0,3); }

@@ -62,13 +62,19 @@ export default async function handler(req, res) {
   if (g) { g.ctr = pct(g.clicks, g.impressions); g.cpc = ratio(g.cost, g.clicks); }
   if (ig) ig.net = num(ig.gained) - num(ig.lost);
 
+  // CPL — solo campañas que optimizan por leads (Meta): leads y su inversión.
+  const leads = inRange(D.leads).reduce((s, p) => s + (Number(p.value) || 0), 0);
+  const leadSpend = inRange(D.lead_spend).reduce((s, p) => s + (Number(p.value) || 0), 0);
+  const cpl = leads ? leadSpend / leads : null;
+
   const series = {
     metaAds_spend: inRange(D.metaAds && D.metaAds.spend),
     instagram_reach: inRange(D.instagram && D.instagram.reach),
+    leads: inRange(D.leads),
   };
 
   res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=1800');
-  return res.status(200).json({ brand: snap.brand, slug, from: lo, to: hi, updated: snap.updated, data, series });
+  return res.status(200).json({ brand: snap.brand, slug, from: lo, to: hi, updated: snap.updated, data, series, leads, leadSpend, cpl });
 }
 
 const num = v => Number(v) || 0;

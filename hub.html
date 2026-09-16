@@ -190,9 +190,9 @@ function deltaHTML(cur,prev){
 
 // ── Config de KPIs y columnas (nombres de campo = shape de /api/metrics) ──
 const KPIS = [
+  {rot:'Costo por lead · CPL',     f:'money2', v:d=>d.__cpl},
+  {rot:'Leads',                    f:'int',    v:d=>d.__leads},
   {rot:'Inversión total en pauta', f:'money',  v:d=>(num(d.metaAds&&d.metaAds.spend)+num(d.googleAds&&d.googleAds.cost))},
-  {rot:'Clics a sitio',            f:'int',    v:d=>(num(d.metaAds&&d.metaAds.clicks)+num(d.googleAds&&d.googleAds.clicks))},
-  {rot:'Impresiones de pauta',     f:'int',    v:d=>(num(d.metaAds&&d.metaAds.impressions)+num(d.googleAds&&d.googleAds.impressions))},
   {rot:'Costo por clic promedio',  f:'money2', v:d=>{const c=num(d.metaAds&&d.metaAds.clicks)+num(d.googleAds&&d.googleAds.clicks);return c?(num(d.metaAds&&d.metaAds.spend)+num(d.googleAds&&d.googleAds.cost))/c:0;}},
 ];
 const COLS = {
@@ -215,9 +215,11 @@ const num = v => Number(v)||0;
 
 function renderKPIs(D,P){
   $('#kpis').innerHTML = KPIS.map(k=>{
-    const cur=k.v(D), dl = P ? deltaHTML(cur,k.v(P)) : '';
+    const cur=k.v(D);
+    const disp = (cur==null) ? '—' : fmt[k.f](cur);
+    const dl = (P && cur!=null) ? deltaHTML(cur,k.v(P)) : '';
     const vs = P ? '<span class="vs">vs período previo</span>' : '';
-    return `<div class="kpi"><div class="rotulo">${k.rot}</div><div class="cifra num">${fmt[k.f](cur)}</div><div class="pie">${dl}${vs}</div></div>`;
+    return `<div class="kpi"><div class="rotulo">${k.rot}</div><div class="cifra num">${disp}</div><div class="pie">${dl}${vs}</div></div>`;
   }).join('');
 }
 function renderCol(net,D,P){
@@ -236,10 +238,12 @@ function renderCol(net,D,P){
 const pctRaw=(c,p)=>((c-p)/p)*100, signPct=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(0)+'%';
 function compressDays(a){ if(!a.length)return''; const p=[]; let s=a[0],pr=a[0];
   for(let i=1;i<=a.length;i++){ if(a[i]===pr+1){pr=a[i];continue;} p.push(s===pr?''+s:s+'–'+pr); s=a[i];pr=a[i]; } return p.join(' y '); }
-function insKPI(D,P){ if(!P)return[]; const m=D.metaAds||{},g=D.googleAds||{},mp=P.metaAds||{},gp=P.googleAds||{};
-  const clk=num(m.clicks)+num(g.clicks),clkP=num(mp.clicks)+num(gp.clicks); if(!clkP)return[];
-  const cpc=(num(m.spend)+num(g.cost))/(clk||1),cpcP=(num(mp.spend)+num(gp.cost))/clkP;
-  return [`Contra el período previo, los <b>clics ${signPct(pctRaw(clk,clkP))}</b> y el <b>costo por clic ${signPct(pctRaw(cpc,cpcP))}</b>. Ahí está la lectura rápida del período.`]; }
+function insKPI(D,P){
+  const leads=num(D.__leads), cpl=D.__cpl;
+  if(!leads) return [];
+  let s=`<b>${esMX(leads)} leads</b> en el período`+(cpl!=null?` a <b>$${cpl.toFixed(2)}</b> de CPL`:'')+'.';
+  if(P && num(P.__leads)){ s+=` Vs el período previo, leads ${signPct(pctRaw(leads,num(P.__leads)))}`+(cpl!=null&&P.__cpl!=null?` y CPL ${signPct(pctRaw(cpl,P.__cpl))}`:'')+'.'; }
+  return [s]; }
 function insPauta(D,P){ const o=[],m=D.metaAds||{},g=D.googleAds||{};
   if(P){ const gp=P.googleAds||{},mp=P.metaAds||{};
     if(gp.impressions){ const gi=pctRaw(num(g.impressions),num(gp.impressions));
@@ -330,7 +334,9 @@ async function refresh(){
   showSections(true);
 
   const D = cur.data.data, S = cur.data.series||{};
+  D.__cpl = cur.data.cpl; D.__leads = cur.data.leads;
   const P = (prev.status==='live'||prev.status==='demo') ? prev.data.data : null;
+  if(P){ P.__cpl = prev.data.cpl; P.__leads = prev.data.leads; }
   $('#brand-name').textContent = cur.data.brand || cap(BRAND);
 
   renderKPIs(D,P);

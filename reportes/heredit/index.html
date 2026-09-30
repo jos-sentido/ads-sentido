@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/favicon.png">
 <link rel="apple-touch-icon" href="/assets/favicon-180.png">
 <link rel="stylesheet" href="/assets/panel.css">
-<link rel="stylesheet" href="/assets/reportes.css">
+<link rel="stylesheet" href="/assets/reportes.css?v=2">
 </head>
 <body>
 <div class="wrap">
@@ -34,70 +34,31 @@
       Auditorías base y cortes de pauta de Heredit. La auditoría es la foto contra la que se miden
       los cortes siguientes; se conserva, no se reescribe.
     </p>
-
-    <div class="arch">
-      <div class="a"><span class="rotulo">Reportes</span><div class="v">2</div><div class="s">Auditorías base Meta y Google</div></div>
-      <div class="a"><span class="rotulo">Canales</span><div class="v">3</div><div class="s">Meta Ads · Google Ads · Calidad de lead (CRM)</div></div>
-      <div class="a"><span class="rotulo">Último corte</span><div class="v" style="font-size:1.125rem">30 sep 2026</div><div class="s">11 jun – 30 sep 2026</div></div>
-      <div class="a"><span class="rotulo">Cuenta</span><div class="v" style="font-size:1.125rem">Heredit</div><div class="s">act_968535875781645</div></div>
-    </div>
+    <div class="arch" id="arch"></div>
   </section>
 
-  <section style="padding-block:20px var(--sec)">
-    <div class="replist">
-
-      <a class="repitem" href="/reportes/heredit/meta-2026-09-30">
-        <div class="repitem__top">
-          <div class="tags">
-            <span class="tag tag--full">Meta Ads</span>
-            <span class="tag">Calidad de lead · CRM</span>
-            <span class="tag">Auditoría base</span>
-          </div>
-          <span class="corte">Corte 30 sep 2026</span>
-        </div>
-        <h3>Meta Ads — rendimiento, calidad de lead e historial</h3>
-        <p class="per">11 jun – 30 sep 2026 · vida de la campaña</p>
-        <p class="desc">
-          90 leads a $859 de CPL en tres meses y medio — CPL razonable. Pero el CRM del cliente dice
-          que solo 9% califica y 0 llegó a trato: el lead que sirve cuesta $15,466, 18× el CPL.
-          Instagram le gana a Facebook por lead; escalar el gasto en septiembre encareció el lead.
-          La palanca no es el clic, es la calidad.
-        </p>
-        <div class="repitem__k">
-          <div class="k"><div class="kl">CPL</div><div class="kv"><span class="cur">$</span>859</div></div>
-          <div class="k"><div class="kl">Leads</div><div class="kv">90</div></div>
-          <div class="k"><div class="kl">CP-Perfilado</div><div class="kv"><span class="cur">$</span>15,466</div></div>
-          <div class="k"><div class="kl">Tasa perfilado</div><div class="kv">8.9%</div></div>
-        </div>
-        <div class="flechas">Abrir reporte →</div>
-      </a>
-
-      <a class="repitem" href="/reportes/heredit/google-2026-09-30">
-        <div class="repitem__top">
-          <div class="tags">
-            <span class="tag tag--full">Google Ads</span>
-            <span class="tag">Auditoría base</span>
-          </div>
-          <span class="corte">Corte 30 sep 2026</span>
-        </div>
-        <h3>Google Ads — calidad de tráfico y medición</h3>
-        <p class="per">21 may – 30 sep 2026 · vida de la cuenta</p>
-        <p class="desc">
-          $10,574 y 1,182 clics, pero 0 conversiones: hoy la cuenta mide tráfico, no leads.
-          Display está encendido en una campaña de Búsqueda y se lleva la mitad de los clics;
-          casi un tercio del gasto visible se va en nombres de otros desarrollos. El pendiente de
-          fondo es medir la conversión en el sitio.
-        </p>
-        <div class="repitem__k">
-          <div class="k"><div class="kl">Inversión</div><div class="kv"><span class="cur">$</span>10,574</div></div>
-          <div class="k"><div class="kl">Clics</div><div class="kv">1,182</div></div>
-          <div class="k"><div class="kl">CTR</div><div class="kv">5.38%</div></div>
-          <div class="k"><div class="kl">Conversiones</div><div class="kv">0</div></div>
-        </div>
-        <div class="flechas">Abrir reporte →</div>
-      </a>
-
+  <section style="padding-block:8px var(--sec)">
+    <div class="toolbar no-print">
+      <div class="field field--search">
+        <input id="q" type="search" placeholder="Buscar por título, periodo, hallazgo…" autocomplete="off" aria-label="Buscar reporte">
+      </div>
+      <div class="field field--sel">
+        <select id="canal" aria-label="Filtrar por canal"><option value="">Todos los canales</option></select>
+        <span class="car" aria-hidden="true">▾</span>
+      </div>
+      <div class="field field--sel">
+        <select id="orden" aria-label="Ordenar">
+          <option value="fecha-desc">Más reciente primero</option>
+          <option value="fecha-asc">Más antiguo primero</option>
+          <option value="titulo">Título (A–Z)</option>
+        </select>
+        <span class="car" aria-hidden="true">▾</span>
+      </div>
+      <span class="count" id="count"></span>
     </div>
+
+    <div class="replist" id="cards"></div>
+    <div class="empty" id="empty" hidden>Ningún reporte coincide con el filtro.</div>
   </section>
 
   <footer>
@@ -109,6 +70,86 @@
 
 <script>
 fetch('/api/session').then(r=>r.json()).then(s=>{ if(!s.authed) location.href='/'; }).catch(()=>{});
+
+// ── Manifiesto de reportes (memoria compartida entre reportes) ──
+const REPORTS = [
+  {
+    slug:'meta-2026-09-30', titulo:'Meta Ads — rendimiento, calidad de lead e historial',
+    canales:['Meta Ads','Calidad de lead · CRM'], tipo:'Auditoría base',
+    fecha:'2026-09-30', periodo:'11 jun – 30 sep 2026 · vida de la campaña', corte:'Corte 30 sep 2026',
+    desc:'90 leads a $859 de CPL en tres meses y medio — CPL razonable. Pero el CRM del cliente dice que solo 9% califica y 0 llegó a trato: el lead que sirve cuesta $15,466, 18× el CPL. Instagram le gana a Facebook por lead; escalar el gasto en septiembre encareció el lead. La palanca no es el clic, es la calidad.',
+    kpis:[{l:'CPL',v:'<span class="cur">$</span>859'},{l:'Leads',v:'90'},{l:'CP-Perfilado',v:'<span class="cur">$</span>15,466'},{l:'Tasa perfilado',v:'8.9%'}],
+    etiquetas:['CP-Perfilado 18× el CPL','Instagram > Facebook','escalar encareció el lead']
+  },
+  {
+    slug:'google-2026-09-30', titulo:'Google Ads — calidad de tráfico y medición',
+    canales:['Google Ads'], tipo:'Auditoría base',
+    fecha:'2026-09-30', periodo:'21 may – 30 sep 2026 · vida de la cuenta', corte:'Corte 30 sep 2026',
+    desc:'$10,574 y 1,182 clics, pero 0 conversiones en la plataforma: hoy la cuenta mide tráfico, no leads. Display está encendido en una campaña de Búsqueda y se lleva la mitad de los clics; casi un tercio del gasto visible se va en nombres de otros desarrollos. El pendiente de fondo es medir la conversión en el sitio.',
+    kpis:[{l:'Inversión',v:'<span class="cur">$</span>10,574'},{l:'Clics',v:'1,182'},{l:'CTR',v:'5.38%'},{l:'Conversiones',v:'0'}],
+    etiquetas:['Display en campaña de Búsqueda','otros desarrollos','medir la conversión']
+  },
+];
+
+// ── Utilidades ──
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cards=document.getElementById('cards'), empty=document.getElementById('empty'),
+      countEl=document.getElementById('count'), q=document.getElementById('q'),
+      canalSel=document.getElementById('canal'), ordenSel=document.getElementById('orden');
+
+// Poblar filtro de canales (únicos, ordenados)
+const canales=[...new Set(REPORTS.flatMap(r=>r.canales))].sort((a,b)=>a.localeCompare(b,'es'));
+canalSel.insertAdjacentHTML('beforeend', canales.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join(''));
+
+// Resumen del archivo
+(function archivo(){
+  const ult = [...REPORTS].sort((a,b)=>b.fecha.localeCompare(a.fecha))[0];
+  const html = [
+    {r:'Reportes publicados', v:REPORTS.length, s:'Total en el archivo: '+REPORTS.length},
+    {r:'Canales cubiertos', v:canales.length, s:canales.join(' · ')},
+    {r:'Último corte', v:ult?ult.fecha.split('-').reverse().join(' ').replace(/^(\d+) (\d+)/,(m,d,mo)=>d+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][+mo-1]) : '—', s:ult?ult.periodo:'', small:true},
+    {r:'Cuenta', v:'Heredit', s:'act_968535875781645', small:true},
+  ];
+  document.getElementById('arch').innerHTML = html.map(a=>
+    `<div class="a"><span class="rotulo">${a.r}</span><div class="v"${a.small?' style="font-size:1.125rem"':''}>${a.v}</div><div class="s">${esc(a.s)}</div></div>`).join('');
+})();
+
+function render(){
+  const term=q.value.trim().toLowerCase();
+  const canal=canalSel.value;
+  let list=REPORTS.filter(r=>{
+    if(canal && !r.canales.includes(canal)) return false;
+    if(!term) return true;
+    const hay=[r.titulo,r.periodo,r.desc,r.tipo].concat(r.canales,r.etiquetas||[]).join(' ').toLowerCase();
+    return hay.indexOf(term)!==-1;
+  });
+  const o=ordenSel.value;
+  list.sort((a,b)=> o==='titulo' ? a.titulo.localeCompare(b.titulo,'es')
+    : o==='fecha-asc' ? a.fecha.localeCompare(b.fecha) : b.fecha.localeCompare(a.fecha));
+
+  cards.innerHTML = list.map(r=>{
+    const tags = `<span class="tag tag--full">${esc(r.canales[0])}</span>`
+      + r.canales.slice(1).map(c=>`<span class="tag">${esc(c)}</span>`).join('')
+      + `<span class="tag">${esc(r.tipo)}</span>`;
+    const kpis = r.kpis.map(k=>`<div class="k"><div class="kl">${esc(k.l)}</div><div class="kv">${k.v}</div></div>`).join('');
+    const hall = (r.etiquetas||[]).map(t=>`<span>${esc(t)}</span>`).join('');
+    return `<a class="repitem" href="/reportes/heredit/${esc(r.slug)}">
+      <div class="repitem__top"><div class="tags">${tags}</div><span class="corte">${esc(r.corte)}</span></div>
+      <h3>${esc(r.titulo)}</h3>
+      <p class="per">${esc(r.periodo)}</p>
+      <p class="desc">${esc(r.desc)}</p>
+      <div class="repitem__k">${kpis}</div>
+      <div class="hall">${hall}</div>
+      <div class="flechas">Abrir reporte →</div>
+    </a>`;
+  }).join('');
+  empty.hidden = list.length>0;
+  countEl.textContent = list.length + (list.length===1?' reporte':' reportes');
+}
+q.addEventListener('input', render);
+canalSel.addEventListener('change', render);
+ordenSel.addEventListener('change', render);
+render();
 </script>
 </body>
 </html>

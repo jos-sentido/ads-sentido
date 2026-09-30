@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Heredit · Auditoría Google Ads — 30 sep 2026</title>
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<link rel="stylesheet" href="/assets/panel.css">
+<link rel="stylesheet" href="/assets/reportes.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="barra">
+    <div class="marca">
+      <img src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+      <span class="ojo" aria-hidden="true"></span>
+    </div>
+    <div class="cliente">
+      <span class="rotulo">Auditoría base · Google Ads</span>
+      <h2>Heredit</h2>
+    </div>
+    <div class="controles no-print">
+      <a class="btn btn--fantasma" href="/reportes/heredit">← Reportes</a>
+      <a class="btn btn--fantasma" href="/heredit">Dashboard</a>
+      <button class="btn btn--fantasma" id="imprimir" type="button">Imprimir</button>
+    </div>
+  </header>
+
+  <section aria-label="Contexto" style="padding-block:28px 0">
+    <p class="rotulo" style="color:var(--hueso-4)">
+      Periodo 21 may – 30 sep 2026 (todo el período) · Corte 30 sep 2026 · Cuenta Heredit · Búsqueda · MXN
+    </p>
+  </section>
+
+  <!-- Resumen / KPIs -->
+  <section aria-label="Indicadores">
+    <div class="kpis kpis--5" id="kpis"></div>
+    <div class="an-kpi-slim"><span class="rombo rombo--lleno"></span>
+      <span class="txt" id="headline"></span></div>
+    <div class="analisis" style="margin-top:34px">
+      <span class="rotulo">Los tres hallazgos</span>
+      <ul id="hallazgos"></ul>
+    </div>
+  </section>
+
+  <!-- Red -->
+  <section id="sec-red">
+    <div class="cab"><div><div class="pleca"></div><h3>Dónde se mostró: Búsqueda vs Display</h3></div>
+      <p class="meta-nota">Una campaña de Búsqueda con la red de Display encendida.</p></div>
+    <div class="hbars" id="red"></div>
+    <div class="analisis" style="margin-top:36px">
+      <span class="rotulo">Lo que dice la data</span>
+      <ul>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">La <b>Red de Display</b> se llevó el <b>69%</b> de las impresiones y la <b>mitad</b> de los clics (589 de 1,182). Display en una campaña de Búsqueda = clics sin intención de compra.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Display cuesta poco ($1,678, 16% del gasto) pero infla la foto: el <b>CPC real de Búsqueda es ~$15</b>, no los $8.95 mezclados. La respuesta en Búsqueda sí es buena (CTR 9.4%).</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Apagar Display concentra el presupuesto ($100/día, <b>limitado</b>) en el tráfico que sí busca comprar.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Términos -->
+  <section id="sec-terminos">
+    <div class="cab"><div><div class="pleca"></div><h3>Qué se compró: términos de búsqueda</h3></div>
+      <p class="meta-nota">En qué buscó la gente que hizo clic (muestra visible).</p></div>
+    <div class="hbars" id="terminos"></div>
+    <div class="analisis" style="margin-top:36px">
+      <span class="rotulo">Lo que dice la data</span>
+      <ul>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">El bucket más grande es la <b>marca</b> ("héredit", "torre heredit", "heredit acueducto"): es <b>cosecha</b>, no prospección — gente que ya buscaba Heredit.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Cerca de <b>un tercio</b> del gasto visible se fue en nombres de <b>otros desarrollos</b> (west point, the landmark, hidalgo residences, legacy andares, lighthouse, hyatt andares…). Tráfico ajeno que entra por variantes de concordancia.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Hay un aviso de <b>palabras clave negativas en conflicto</b>: la lista de negativas está mal armada y deja pasar términos que deberían bloquearse.</span></li>
+      </ul>
+    </div>
+    <p class="fuente-nota">Solo el <b>39%</b> del gasto de búsqueda ($3,450 de $8,896) se desglosa por término; el resto Google lo
+      agrupa en "otros términos". Los porcentajes son sobre lo visible (muestra de 24 términos / 139 clics).</p>
+  </section>
+
+  <!-- Estructura y anuncio -->
+  <section id="sec-estructura">
+    <div class="cab"><div><div class="pleca"></div><h3>Estructura y anuncio</h3></div></div>
+    <table class="tabla">
+      <thead><tr><th>Elemento</th><th>Estado</th></tr></thead>
+      <tbody id="estructura"></tbody>
+    </table>
+  </section>
+
+  <!-- Medición -->
+  <section id="sec-medicion">
+    <div class="cab"><div><div class="pleca"></div><h3>Medición: el hueco de fondo</h3></div></div>
+    <div class="split">
+      <div>
+        <div class="kpis" style="grid-template-columns:1fr 1fr">
+          <div class="kpi" style="border-left:0;padding-left:0"><div class="rotulo">Conversiones</div>
+            <div class="cifra num">0</div>
+            <div class="pie"><span class="delta"><span class="vs">en toda la vida de la cuenta</span></span></div></div>
+          <div class="kpi"><div class="rotulo">Costo / conversión</div>
+            <div class="cifra num">—</div>
+            <div class="pie"><span class="delta"><span class="vs">sin dato posible</span></span></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="analisis" style="margin-top:0">
+          <ul>
+            <li><span class="rombo rombo--lleno"></span><span class="txt">El anuncio manda al <b>sitio oficial (heredit.mx)</b>, donde el formulario <b>no está medido</b> de vuelta a Google. Por eso hay 0 conversiones: hoy se mide <b>tráfico, no leads</b>.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt">En el CRM del cliente, Google cae como <b>"sitio web"</b> sin campaña. La calidad de lead de Google solo se puede leer <b>a nivel desarrollo</b>, no por campaña, hasta que el sitio pase el evento a Google.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt">Es el <b>pendiente #1</b>: sin conversión medida no hay costo por lead real de Google ni optimización hacia leads.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plan -->
+  <section id="sec-plan">
+    <div class="cab"><div><div class="pleca"></div><h3>Plan de acción</h3></div>
+      <p class="meta-nota">En orden de impacto.</p></div>
+    <table class="tabla">
+      <thead><tr><th>Prioridad</th><th>Tarea</th><th>Por qué</th></tr></thead>
+      <tbody id="plan"></tbody>
+    </table>
+    <p class="fuente-nota">Con la conversión medida, el próximo corte puede dar <b>costo por lead real de Google</b>
+      y empezar a comparar canales de verdad (ver el cruce de medios).</p>
+  </section>
+
+  <!-- Lectura -->
+  <section class="papel" id="sec-lectura">
+    <div class="lectura"><div class="pleca"></div><h3>Lectura</h3>
+      <div class="firma">Análisis · Sentido</div>
+      <p><span class="en">Google trajo 1,182 clics por $10,574 en cuatro meses, pero la cuenta hoy mide tráfico, no leads.</span> No hay una sola conversión registrada, porque el anuncio lleva al sitio oficial y ahí el formulario no reporta de vuelta. Sin ese cierre, no se puede decir cuánto cuesta un lead de Google.</p>
+      <p><span class="en">Lo que sí se puede leer es la calidad del tráfico, y hay tres fugas.</span> La primera: Display está encendido en una campaña de Búsqueda y se lleva la mitad de los clics con baja intención. La segunda: casi un tercio del gasto visible se va en nombres de otros desarrollos, tráfico que no es de Heredit. La tercera: el bucket más grande es la marca — gente que ya buscaba Heredit — que es cosecha, no prospección.</p>
+      <p><span class="en">El orden es claro.</span> Medir la conversión (que el sitio dispare el evento a Google), apagar Display, y limpiar negativas para dejar de pagar por otros desarrollos. Con eso, el presupuesto —hoy limitado a $100/día— trabaja en búsquedas con intención, y el próximo corte ya puede hablar de costo por lead, no de clics.</p>
+    </div>
+  </section>
+
+  <!-- Método -->
+  <section id="sec-metodo">
+    <div class="cab"><div><div class="pleca"></div><h3>Método y límites</h3></div></div>
+    <ul class="metodo">
+      <li><span class="rombo"></span><span><b>Fuente:</b> interfaz de Google Ads (cuenta Heredit), leída el 30 sep 2026, rango "Todo el período" (21 may – 30 sep 2026).</span></li>
+      <li><span class="rombo"></span><span><b>Sin conversiones = no se evalúa rendimiento, se evalúa calidad de tráfico.</b> Los proxies: red (Búsqueda vs Display), marca vs no-marca, términos de otros desarrollos.</span></li>
+      <li><span class="rombo"></span><span><b>El reporte de términos no cuadra con el total:</b> Google solo desglosa ~39% del gasto de búsqueda; los porcentajes son sobre lo visible.</span></li>
+      <li><span class="rombo"></span><span><b>Lo que este dato no responde:</b> costo por lead ni calidad de lead por campaña de Google (cae como "sitio web" en el CRM). Se resuelve con la conversión medida + UTMs.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="fm"><span class="ojo" aria-hidden="true"></span>
+      <img class="nom" src="/assets/logo-sentido-nombre-light.png" alt="Sentido"></div>
+    <p class="fnota">Auditoría base Google Ads · 21 may – 30 sep 2026 · Documento privado, solo para Heredit · Sentido desde 2010.</p>
+  </footer>
+</div>
+
+<script>
+fetch('/api/session').then(r=>r.json()).then(s=>{ if(!s.authed) location.href='/'; }).catch(()=>{});
+
+const esMX = n => (Number(n)||0).toLocaleString('es-MX');
+const money = v => '<span class="cur">$</span>'+esMX(Math.round(v));
+
+const KPIS=[
+  {r:'Inversión', v:money(10573.63)},
+  {r:'Clics', v:esMX(1182)},
+  {r:'CTR', v:'5.38<span class="cur" style="margin-left:.06em">%</span>'},
+  {r:'CPC promedio', v:'<span class="cur">$</span>8.95'},
+  {r:'Conversiones', v:'0'},
+];
+document.getElementById('kpis').innerHTML = KPIS.map(k=>
+  `<div class="kpi"><div class="rotulo">${k.r}</div><div class="cifra num">${k.v}</div></div>`).join('');
+document.getElementById('headline').innerHTML =
+  '<b>$10,574</b> y <b>1,182 clics</b> en cuatro meses, pero <b>0 conversiones</b>: hoy la cuenta mide tráfico, no leads. Lo que sí se lee es la calidad de ese tráfico — y hay fugas.';
+
+document.getElementById('hallazgos').innerHTML = [
+  '<b>Display encendido en una campaña de Búsqueda:</b> 69% de las impresiones y la mitad de los clics, con baja intención.',
+  '<b>~1/3 del gasto visible</b> se va en nombres de <b>otros desarrollos</b>; el bucket más grande es la <b>marca</b> (cosecha).',
+  '<b>0 conversiones</b> porque el anuncio va al sitio oficial sin medición de vuelta. Es el pendiente de fondo.'
+].map(t=>`<li><span class="rombo rombo--lleno"></span><span class="txt">${t}</span></li>`).join('');
+
+// Red
+const RED=[
+  {l:'Búsqueda en Google', spend:8873.52, clics:587, ctr:'9.37%'},
+  {l:'Red de Display de Google', spend:1678.13, clics:589, ctr:'3.89%'},
+  {l:'Socios de búsqueda', spend:21.99, clics:6, ctr:'1.11%'},
+];
+const rMax=Math.max(...RED.map(r=>r.spend));
+document.getElementById('red').innerHTML = RED.map(r=>
+  `<div class="hbar"><div class="lab">${r.l}<small>${esMX(r.clics)} clics · CTR ${r.ctr}</small></div>
+    <div class="track"><div class="fill" style="width:${r.spend/rMax*100}%"></div></div>
+    <div class="val">${money(r.spend)}</div></div>`).join('');
+
+// Términos (muestra visible, por bucket)
+const TERM=[
+  {l:'Marca (héredit, torre heredit…)', clics:56, cost:688},
+  {l:'Otros desarrollos (competidores)', clics:42, cost:646},
+  {l:'Genéricos (depas de lujo, penthouse)', clics:41, cost:533},
+];
+const tMax=Math.max(...TERM.map(t=>t.cost));
+document.getElementById('terminos').innerHTML = TERM.map(t=>
+  `<div class="hbar"><div class="lab">${t.l}<small>${t.clics} clics</small></div>
+    <div class="track"><div class="fill fill--soft" style="width:${t.cost/tMax*100}%"></div></div>
+    <div class="val">${money(t.cost)}</div></div>`).join('');
+
+// Estructura
+const EST=[
+  {e:'Campaña', s:'1 sola — "Heredit - Búsqueda" (tipo Búsqueda).'},
+  {e:'Presupuesto', s:'$100/día · <b>limitado por presupuesto</b> (pierde impresiones por tope).'},
+  {e:'Grupos de anuncios', s:'1 solo — keywords heterogéneas en un mismo grupo.'},
+  {e:'Anuncio', s:'1 RSA (búsqueda responsivo), aprobado. Google sugiere reforzar recursos.'},
+  {e:'Destino', s:'Sitio oficial heredit.mx — sin conversión medida (ver abajo).'},
+  {e:'Negativas', s:'<b>Conflicto de palabras clave negativas</b> activo — revisar la lista.'},
+];
+document.getElementById('estructura').innerHTML = EST.map(x=>
+  `<tr><td style="color:var(--hueso);font-weight:600">${x.e}</td><td class="acc" style="padding-left:24px">${x.s}</td></tr>`).join('');
+
+// Plan
+const PLAN=[
+  {p:'1', t:'Instalar/medir la conversión (evento del sitio → Google)', w:'Sin conversión no hay costo por lead ni optimización hacia leads. Es el candado de todo lo demás.'},
+  {p:'2', t:'Apagar la Red de Display en la campaña de Búsqueda', w:'Se lleva la mitad de los clics con baja intención. Concentra el presupuesto en búsqueda real.'},
+  {p:'3', t:'Limpiar negativas y revisar concordancias', w:'Hay conflicto de negativas y ~1/3 del gasto visible en otros desarrollos. Bloquear lo ajeno.'},
+  {p:'4', t:'Separar marca de prospección', w:'La marca es cosecha barata; sepárala para no confundir su CPC con el de prospección.'},
+  {p:'5', t:'Reestructurar en grupos temáticos + reforzar el RSA', w:'Un solo grupo con keywords mezcladas baja la relevancia. Grupos por intención + más recursos al anuncio.'},
+];
+document.getElementById('plan').innerHTML = PLAN.map(x=>
+  `<tr><td class="hi" style="text-align:left">${x.p}</td><td style="text-align:left;color:var(--hueso);font-weight:600;padding-right:20px">${x.t}</td><td class="acc">${x.w}</td></tr>`).join('');
+
+document.getElementById('imprimir').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>

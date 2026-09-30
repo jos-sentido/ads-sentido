@@ -74,6 +74,14 @@ fetch('/api/session').then(r=>r.json()).then(s=>{ if(!s.authed) location.href='/
 // ── Manifiesto de reportes (memoria compartida entre reportes) ──
 const REPORTS = [
   {
+    slug:'cruce-2026-09-30', titulo:'Cruce de medios — Meta + Google + CRM',
+    canales:['Cruce de medios'], tipo:'Cruce',
+    fecha:'2026-09-30', periodo:'16 – 29 sep 2026 · últimos 14 días', corte:'Corte 30 sep 2026',
+    desc:'Dos canales, ~$20,000 en 14 días, 14 leads — y 0 perfilaron. El CRM es lo único que ve la calidad de los dos en la misma vara: la cosecha de calidad del periodo fue nula. Los dos fallan por la misma causa raíz (medición rota → persiguen volumen), así que una sola pieza los arregla.',
+    kpis:[{l:'Inversión',v:'~<span class="cur">$</span>20,000'},{l:'Leads (CRM)',v:'14'},{l:'Perfilados',v:'0'},{l:'Tasa perfilado',v:'0%'}],
+    etiquetas:['0 perfilados en 14 días','misma causa raíz: medición','Google cosecha la marca']
+  },
+  {
     slug:'meta-2026-09-30', titulo:'Meta Ads — rendimiento, calidad de lead e historial',
     canales:['Meta Ads','Calidad de lead · CRM'], tipo:'Auditoría base',
     fecha:'2026-09-30', periodo:'11 jun – 30 sep 2026 · vida de la campaña', corte:'Corte 30 sep 2026',

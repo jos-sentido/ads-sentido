@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Heredit · Cruce de medios — 16–29 sep 2026</title>
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<link rel="stylesheet" href="/assets/panel.css">
+<link rel="stylesheet" href="/assets/reportes.css?v=2">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="barra">
+    <div class="marca">
+      <img src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+      <span class="ojo" aria-hidden="true"></span>
+    </div>
+    <div class="cliente">
+      <span class="rotulo">Cruce de medios · Meta + Google + CRM</span>
+      <h2>Heredit</h2>
+    </div>
+    <div class="controles no-print">
+      <a class="btn btn--fantasma" href="/reportes/heredit">← Reportes</a>
+      <a class="btn btn--fantasma" href="/heredit">Dashboard</a>
+      <button class="btn btn--fantasma" id="imprimir" type="button">Imprimir</button>
+    </div>
+  </header>
+
+  <section aria-label="Contexto" style="padding-block:28px 0">
+    <p class="rotulo" style="color:var(--hueso-4)">
+      Últimos 14 días · 16 – 29 sep 2026 · mismo rango en Meta, Google y el CRM · Corte 30 sep 2026
+    </p>
+  </section>
+
+  <!-- Resumen / KPIs -->
+  <section aria-label="Indicadores">
+    <div class="kpis kpis--5" id="kpis"></div>
+    <div class="an-kpi-slim"><span class="rombo rombo--lleno"></span>
+      <span class="txt" id="headline"></span></div>
+    <div class="analisis" style="margin-top:34px">
+      <span class="rotulo">Lo que solo se ve con los canales juntos</span>
+      <ul id="hallazgos"></ul>
+    </div>
+  </section>
+
+  <!-- Calidad por canal (CRM) -->
+  <section id="sec-calidad">
+    <div class="cab"><div><div class="pleca"></div><h3>Calidad de lead por canal</h3></div>
+      <p class="meta-nota">La única vara que mide a los dos canales igual: el CRM del cliente.</p></div>
+    <table class="tabla">
+      <thead><tr><th>Canal</th><th>Inversión (14d)</th><th>Leads (CRM)</th><th>Perfilados</th><th>Tasa</th><th>CP-Perfilado</th></tr></thead>
+      <tbody id="calidad"></tbody>
+    </table>
+    <div class="analisis" style="margin-top:32px">
+      <ul>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">En 14 días los dos canales juntos gastaron <b>~$20,000</b> y trajeron <b>14 leads</b>, de los cuales <b>0</b> perfilaron y <b>0</b> llegaron a cita. La calidad real del periodo fue <b>cero</b>.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt"><b>No hay CP-Perfilado que comparar:</b> ningún canal produjo un lead que califique. La comparación de eficiencia entre canales no es posible este periodo — y ese es el dato.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Ninguno lo ve solo: Meta reporta 14 leads a un costo; Google reporta 0 conversiones. El <b>CRM</b> dice que, mirándolos juntos, la cosecha de calidad fue nula.</span></li>
+      </ul>
+    </div>
+    <p class="fuente-nota">Las "conversiones" de Google no son 0 en el negocio: sus leads entran al CRM como
+      <b>"sitio web"</b> (2 en el periodo). Pero "sitio web" es un proxy — incluye tráfico directo y
+      orgánico al sitio, no solo la pauta de Google, y Google al sitio llega <b>sin atribución por campaña</b>.
+      Por eso su calidad se lee a nivel desarrollo, no por campaña.</p>
+  </section>
+
+  <!-- Las preguntas del cruce -->
+  <section id="sec-preguntas">
+    <div class="cab"><div><div class="pleca"></div><h3>Las preguntas que ningún canal responde solo</h3></div></div>
+    <table class="tabla">
+      <thead><tr><th>Pregunta</th><th>Lo que muestra el cruce</th></tr></thead>
+      <tbody id="preguntas"></tbody>
+    </table>
+  </section>
+
+  <!-- Causa raíz común -->
+  <section class="papel" id="sec-causa">
+    <div class="lectura" style="max-width:820px"><div class="pleca"></div><h3>La misma causa raíz, dos veces</h3>
+      <div class="firma">Análisis · Sentido</div>
+      <p><span class="en">Los dos canales fallan por lo mismo, y eso es una buena noticia: es un trabajo, no dos.</span></p>
+      <p><span class="en">Medición.</span> Meta pierde el 38% de sus leads entre la plataforma y el CRM; Google no mide ninguna conversión porque manda al sitio oficial sin evento de vuelta. Mientras no se cierre esa medición, los dos canales optimizan hacia "llenar formularios" o "generar clics", no hacia el lead que califica.</p>
+      <p><span class="en">Calidad.</span> Con la medición rota, las dos cuentas persiguen volumen. En 14 días el resultado fue 14 leads y cero perfilados. Meta lo hizo escalando el gasto; Google, dejando Display encendido y pagando por búsquedas de otros desarrollos. Es el mismo error —automatización que abarata el clic y encarece el resultado— en dos plataformas.</p>
+      <p><span class="en">Una sola pieza arregla las dos.</span> Cerrar la medición y optimizar a lead perfilado cambia el norte de ambas cuentas a la vez. Por eso va en primer lugar, antes que cualquier ajuste de creativo o de puja.</p>
+    </div>
+  </section>
+
+  <!-- Orden de ejecución -->
+  <section id="sec-orden">
+    <div class="cab"><div><div class="pleca"></div><h3>Orden de ejecución</h3></div>
+      <p class="meta-nota">Una palanca a la vez, en este orden.</p></div>
+    <table class="tabla">
+      <thead><tr><th>#</th><th>Canal</th><th>Palanca</th><th>Por qué va aquí</th></tr></thead>
+      <tbody id="orden"></tbody>
+    </table>
+  </section>
+
+  <!-- Método -->
+  <section id="sec-metodo">
+    <div class="cab"><div><div class="pleca"></div><h3>Método y límites</h3></div></div>
+    <ul class="metodo">
+      <li><span class="rombo"></span><span><b>Fuentes:</b> Meta Ads y CRM del cliente (Zoho) leídos al mismo rango (16–29 sep 2026); Google Ads como contexto. El cruce no genera datos: lee los reportes de canal y el CRM.</span></li>
+      <li><span class="rombo"></span><span><b>Las sumas de inversión dimensionan, no comparan eficiencia.</b> Meta invirtió $18,717 en su ventana de escalamiento; Google opera con presupuesto limitado ($100/día), un orden de magnitud menor.</span></li>
+      <li><span class="rombo"></span><span><b>La atribución entre canales es hipótesis, no dato,</b> mientras no haya tracking que la mida. La relación "Meta sube la búsqueda de marca en Google" es una lectura, no una medición.</span></li>
+      <li><span class="rombo"></span><span><b>Si un canal no reporta conversiones, no hay comparación de costo por lead entre canales.</b> Por eso el cruce compara calidad vía el CRM, no CPL.</span></li>
+      <li><span class="rombo"></span><span><b>Muestra chica:</b> 14 leads / 0 perfilados indica dirección, no conclusión estadística. Pero cero perfilados es cero.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="fm"><span class="ojo" aria-hidden="true"></span>
+      <img class="nom" src="/assets/logo-sentido-nombre-light.png" alt="Sentido"></div>
+    <p class="fnota">Cruce de medios · 16–29 sep 2026 · Documento privado, solo para Heredit · Sentido desde 2010.</p>
+  </footer>
+</div>
+
+<script>
+fetch('/api/session').then(r=>r.json()).then(s=>{ if(!s.authed) location.href='/'; }).catch(()=>{});
+
+const esMX = n => (Number(n)||0).toLocaleString('es-MX');
+const money = v => '<span class="cur">$</span>'+esMX(Math.round(v));
+
+const KPIS=[
+  {r:'Inversión (14d)', v:'~<span class="cur">$</span>20,000'},
+  {r:'Leads (CRM)', v:'14'},
+  {r:'Perfilados', v:'0'},
+  {r:'Tasa de perfilado', v:'0<span class="cur" style="margin-left:.06em">%</span>'},
+  {r:'CP-Perfilado', v:'—'},
+];
+document.getElementById('kpis').innerHTML = KPIS.map(k=>
+  `<div class="kpi"><div class="rotulo">${k.r}</div><div class="cifra num">${k.v}</div></div>`).join('');
+document.getElementById('headline').innerHTML =
+  'Dos canales, ~<b>$20,000</b> en 14 días, <b>14 leads</b> — y <b>0</b> perfilaron. El CRM es lo único que ve la calidad de los dos en la misma vara.';
+
+document.getElementById('hallazgos').innerHTML = [
+  '<b>Cero calidad en el periodo:</b> 14 leads entre los dos canales, 0 perfilados, 0 citas. No hay CP-Perfilado que comparar.',
+  '<b>Misma causa raíz en los dos:</b> la medición está rota (Meta pierde 38% de leads, Google no mide conversión) → ambos persiguen volumen.',
+  '<b>Google cosecha lo que Meta siembra:</b> su mayor bucket de búsquedas es la marca "héredit" — demanda que la pauta de Meta y el orgánico generan.'
+].map(t=>`<li><span class="rombo rombo--lleno"></span><span class="txt">${t}</span></li>`).join('');
+
+// Calidad por canal
+const CAL=[
+  {c:'Meta Ads', sub:'redes sociales', inv:'<span class="cur">$</span>18,717', leads:'12', perf:'0', tasa:'0%', cpp:'—'},
+  {c:'Google Ads', sub:'sitio web · proxy', inv:'$100/día límite', leads:'2', perf:'0', tasa:'0%', cpp:'—'},
+  {c:'Total', sub:'', inv:'~$20,000', leads:'14', perf:'0', tasa:'0%', cpp:'—', total:true},
+];
+document.getElementById('calidad').innerHTML = CAL.map(r=>
+  `<tr${r.total?' class="total"':''}><td>${r.c}${r.sub?'<span class="sub">'+r.sub+'</span>':''}</td>
+    <td>${r.inv}</td><td class="hi">${r.leads}</td><td class="hi">${r.perf}</td><td>${r.tasa}</td><td>${r.cpp}</td></tr>`).join('');
+
+// Preguntas del cruce
+const PREG=[
+  {q:'¿Un canal cobra la demanda que otro genera?', a:'Sí. En Google el mayor bucket de búsquedas es la <b>marca</b> ("héredit"). Cuando Meta y el orgánico mueven la marca, Google la cosecha — no prospecta.'},
+  {q:'¿Fallan por la misma causa raíz?', a:'Sí: <b>medición</b> (Meta pierde 38% de leads al CRM; Google no mide conversión) y <b>calidad</b> (0 perfilados en ambos). Una pieza arregla los dos.'},
+  {q:'¿Hay aprendizaje creativo transferible?', a:'El ángulo <b>"esquema de pago"</b> que Meta probó no existe como anuncio ni keyword en Google. Es gratis moverlo.'},
+  {q:'¿Se repite el mismo error?', a:'Sí: automatización que abarata el clic y encarece el resultado — <b>Display</b> encendido en la Búsqueda de Google; ubicaciones caras (FB Reels) en Meta.'},
+  {q:'¿Un segmento gana en un canal y falta en el otro?', a:'El <b>perfil maduro (55+)</b> rinde en Meta; en Google no hay keywords que lo capturen. Hipótesis barata de probar.'},
+];
+document.getElementById('preguntas').innerHTML = PREG.map(p=>
+  `<tr><td style="color:var(--hueso);font-weight:600;max-width:32ch">${p.q}</td><td class="acc" style="padding-left:24px">${p.a}</td></tr>`).join('');
+
+// Orden de ejecución
+const ORD=[
+  {n:'1', c:'Ambos', p:'Cerrar la medición', w:'Conectar CRM↔Meta (CAPI) y medir la conversión de Google en el sitio. Sin esto, ninguna optimización apunta a calidad. Un trabajo que arregla los dos.'},
+  {n:'2', c:'Meta', p:'Dejar de escalar volumen', w:'El escalamiento de sep dio 14 leads y 0 perfilados. Volver a ~$4–5k/sem y optimizar a lead perfilado, no a formularios.'},
+  {n:'3', c:'Google', p:'Apagar Display + limpiar negativas', w:'Concentra el poco presupuesto en búsqueda con intención y deja de pagar por otros desarrollos.'},
+  {n:'4', c:'Meta', p:'Concentrar en lo que rinde', w:'Instagram sobre Facebook, y el perfil maduro que ya convierte mejor.'},
+  {n:'5', c:'Ambos', p:'Transferir el ángulo que funciona', w:'Llevar "esquema de pago" a Google; preparar keywords del perfil que rinde en Meta.'},
+];
+document.getElementById('orden').innerHTML = ORD.map(o=>
+  `<tr><td class="hi" style="text-align:left">${o.n}</td><td><span class="estado">${o.c}</span></td>
+    <td style="text-align:left;color:var(--hueso);font-weight:600;padding-right:20px">${o.p}</td><td class="acc">${o.w}</td></tr>`).join('');
+
+document.getElementById('imprimir').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>

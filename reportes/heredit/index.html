@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Reportes · Heredit — Sentido</title>
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<link rel="stylesheet" href="/assets/panel.css">
+<link rel="stylesheet" href="/assets/reportes.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="barra">
+    <div class="marca">
+      <img src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+      <span class="ojo" aria-hidden="true"></span>
+    </div>
+    <div class="cliente">
+      <span class="rotulo">Reportes de pauta · Cliente</span>
+      <h2>Heredit</h2>
+    </div>
+    <div class="controles no-print">
+      <a class="btn btn--fantasma" href="/heredit">← Dashboard</a>
+    </div>
+  </header>
+
+  <section aria-label="Resumen del archivo" style="padding-block:var(--sec) 0">
+    <div class="pleca"></div>
+    <span class="rotulo">Archivo de reportes</span>
+    <p style="max-width:60ch;margin:16px 0 0;color:var(--hueso-2)">
+      Auditorías base y cortes de pauta de Heredit. La auditoría es la foto contra la que se miden
+      los cortes siguientes; se conserva, no se reescribe.
+    </p>
+
+    <div class="arch">
+      <div class="a"><span class="rotulo">Reportes</span><div class="v">1</div><div class="s">Auditoría base Meta Ads</div></div>
+      <div class="a"><span class="rotulo">Canales</span><div class="v">2</div><div class="s">Meta Ads · Calidad de lead (CRM). Google, al siguiente corte</div></div>
+      <div class="a"><span class="rotulo">Último corte</span><div class="v" style="font-size:1.125rem">30 sep 2026</div><div class="s">11 jun – 30 sep 2026</div></div>
+      <div class="a"><span class="rotulo">Cuenta</span><div class="v" style="font-size:1.125rem">Heredit</div><div class="s">act_968535875781645</div></div>
+    </div>
+  </section>
+
+  <section style="padding-block:20px var(--sec)">
+    <div class="replist">
+
+      <a class="repitem" href="/reportes/heredit/meta-2026-09-30">
+        <div class="repitem__top">
+          <div class="tags">
+            <span class="tag tag--full">Meta Ads</span>
+            <span class="tag">Calidad de lead · CRM</span>
+            <span class="tag">Auditoría base</span>
+          </div>
+          <span class="corte">Corte 30 sep 2026</span>
+        </div>
+        <h3>Meta Ads — rendimiento, calidad de lead e historial</h3>
+        <p class="per">11 jun – 30 sep 2026 · vida de la campaña</p>
+        <p class="desc">
+          90 leads a $859 de CPL en tres meses y medio — CPL razonable. Pero el CRM del cliente dice
+          que solo 9% califica y 0 llegó a trato: el lead que sirve cuesta $15,466, 18× el CPL.
+          Instagram le gana a Facebook por lead; escalar el gasto en septiembre encareció el lead.
+          La palanca no es el clic, es la calidad.
+        </p>
+        <div class="repitem__k">
+          <div class="k"><div class="kl">CPL</div><div class="kv"><span class="cur">$</span>859</div></div>
+          <div class="k"><div class="kl">Leads</div><div class="kv">90</div></div>
+          <div class="k"><div class="kl">CP-Perfilado</div><div class="kv"><span class="cur">$</span>15,466</div></div>
+          <div class="k"><div class="kl">Tasa perfilado</div><div class="kv">8.9%</div></div>
+        </div>
+        <div class="flechas">Abrir reporte →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="fm"><span class="ojo" aria-hidden="true"></span>
+      <img class="nom" src="/assets/logo-sentido-nombre-light.png" alt="Sentido"></div>
+    <p class="fnota">Heredit · Península Lifestyle Properties — archivo interno de reportes de pauta · Sentido desde 2010.</p>
+  </footer>
+</div>
+
+<script>
+fetch('/api/session').then(r=>r.json()).then(s=>{ if(!s.authed) location.href='/'; }).catch(()=>{});
+</script>
+</body>
+</html>

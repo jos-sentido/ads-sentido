@@ -1,0 +1,107 @@
+/* ═══════════════════════════════════════════════════════════════
+   ads.sentido.mx — Reportes de pauta (auditorías y cortes)
+   Complementa panel.css. Mismo sistema: tinta + hueso, Archivo,
+   sin color, sin tarjetas. Barras y tablas con regla y densidad.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── KPIs de 5 (auditoría trae CP-Perfilado + tasa) ── */
+.kpis--5{grid-template-columns:repeat(5,1fr)}
+@media (max-width:900px){ .kpis--5{grid-template-columns:1fr 1fr} .kpis--5 .kpi:nth-child(-n+2){border-top:0} }
+@media (max-width:560px){ .kpis--5{grid-template-columns:1fr} }
+
+/* ── Tag de canal / tipo ── */
+.tag{display:inline-block;font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+  color:var(--hueso-3);border:1px solid var(--linea-2);padding:4px 9px;line-height:1}
+.tag--full{background:var(--hueso);color:var(--tinta);border-color:var(--hueso)}
+
+/* ── Índice de reportes: planchas de renglones (sin tarjetas) ── */
+.replist{border-top:1px solid var(--linea);margin-top:8px}
+.repitem{display:block;text-decoration:none;padding:30px 4px;border-bottom:1px solid var(--linea);
+  transition:padding-left .3s var(--ease)}
+.repitem:hover{padding-left:16px}
+.repitem__top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.repitem__top .tags{display:flex;gap:8px;flex-wrap:wrap}
+.repitem__top .corte{margin-left:auto;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--hueso-4)}
+.repitem h3{font-size:clamp(1.25rem,2vw,1.6rem);margin-bottom:6px}
+.repitem .per{font-size:.8125rem;letter-spacing:.02em;color:var(--hueso-4);font-variant-numeric:tabular-nums;margin-bottom:16px}
+.repitem .desc{color:var(--hueso-2);font-size:.9375rem;line-height:1.6;max-width:74ch;margin-bottom:20px}
+.repitem__k{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid var(--linea);max-width:560px}
+.repitem__k .k{padding:14px 22px 0 0;margin-right:22px;border-right:1px solid var(--linea)}
+.repitem__k .k:last-child{border-right:0}
+.repitem__k .kl{font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--hueso-4);margin-bottom:6px}
+.repitem__k .kv{font-size:1.375rem;font-weight:800;color:var(--hueso);line-height:1;font-variant-numeric:tabular-nums}
+.repitem__k .kv .cur{font-weight:300;font-size:.55em;color:var(--hueso-3);margin-right:.1em}
+.repitem .flechas{margin-top:20px;font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--hueso-3)}
+.repitem:hover .flechas{color:var(--hueso)}
+
+/* resumen del archivo (mini-KPIs arriba del índice) */
+.arch{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--linea);margin:36px 0}
+.arch .a{padding:22px 24px;border-left:1px solid var(--linea)}
+.arch .a:first-child{border-left:0}
+.arch .a .rotulo{margin-bottom:12px;display:block}
+.arch .a .v{font-size:1.75rem;font-weight:800;color:var(--hueso);line-height:1;font-variant-numeric:tabular-nums}
+.arch .a .s{margin-top:10px;font-size:.75rem;color:var(--hueso-4);line-height:1.4}
+@media (max-width:760px){ .arch{grid-template-columns:1fr 1fr} .arch .a:nth-child(-n+2){border-top:0} .arch .a:nth-child(odd){border-left:0} .arch .a:nth-child(n+3){border-top:1px solid var(--linea)} }
+
+/* ── Barras horizontales (ubicaciones, demografía) ── */
+.hbars{display:flex;flex-direction:column}
+.hbar{display:grid;grid-template-columns:minmax(120px,1.1fr) 1fr auto;align-items:center;gap:16px;
+  padding:13px 0;border-bottom:1px solid var(--linea)}
+.hbar:last-child{border-bottom:0}
+.hbar .lab{color:var(--hueso-2);font-size:.9375rem}
+.hbar .lab small{display:block;color:var(--hueso-4);font-size:.6875rem;letter-spacing:.06em;margin-top:2px}
+.hbar .track{height:10px;background:var(--tinta-3);position:relative;overflow:hidden}
+.hbar .fill{position:absolute;inset:0 auto 0 0;background:var(--hueso);opacity:.85}
+.hbar .fill--soft{opacity:.32}
+.hbar .val{text-align:right;color:var(--hueso);font-weight:600;font-size:.9375rem;font-variant-numeric:tabular-nums;min-width:120px}
+.hbar .val b{color:var(--hueso)}
+.hbar .val small{color:var(--hueso-4);font-weight:400;font-size:.75rem;margin-left:8px}
+
+/* ── Tabla densa (creativos, conjuntos, plan, funnel) ── */
+.tabla{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tabla th{font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--hueso-4);
+  text-align:right;padding:0 0 14px;border-bottom:1px solid var(--linea-2);white-space:nowrap}
+.tabla th:first-child{text-align:left}
+.tabla td{padding:14px 0;border-bottom:1px solid var(--linea);color:var(--hueso);font-size:.9375rem;text-align:right;vertical-align:top}
+.tabla td:first-child{text-align:left;color:var(--hueso-2);padding-right:20px}
+.tabla td.hi{color:var(--hueso);font-weight:700}
+.tabla td .sub{display:block;color:var(--hueso-4);font-size:.75rem;margin-top:3px;letter-spacing:.02em}
+.tabla tr.total td{border-top:1px solid var(--linea-2);border-bottom:0;color:var(--hueso);font-weight:700;padding-top:16px}
+.estado{font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--hueso-4);white-space:nowrap}
+.acc{color:var(--hueso-2);font-size:.8125rem;text-align:left}
+@media (max-width:640px){ .tabla{font-size:.8125rem} .tabla th{font-size:.5625rem} .tabla td{font-size:.8125rem} }
+
+/* ── Funnel (CRM) ── */
+.funnel{display:flex;flex-direction:column;gap:2px;max-width:640px}
+.fstep{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:16px}
+.fstep .fl{font-size:.875rem;color:var(--hueso-2);text-align:right}
+.fstep .fl.star{color:var(--hueso);font-weight:700}
+.fstep .fbar{position:relative;height:34px;background:var(--tinta-3)}
+.fstep .fbar i{position:absolute;inset:0 auto 0 0;background:var(--hueso);opacity:.16;display:block}
+.fstep.star .fbar i{opacity:.9}
+.fstep .fbar span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.8125rem;
+  font-weight:700;color:var(--hueso);font-variant-numeric:tabular-nums;z-index:2}
+.fstep.star .fbar span{color:var(--tinta)}
+.fstep .fbar em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;
+  font-size:.75rem;color:var(--hueso-3);font-variant-numeric:tabular-nums;z-index:2}
+/* en la fila destacada el % queda sobre la pista oscura (la barra es corta): mantener claro */
+.fstep.star .fbar em{color:var(--hueso-2)}
+
+/* dos columnas de contenido con regla (para cruce KPIs + texto) */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px)}
+@media (max-width:820px){ .split{grid-template-columns:1fr;gap:40px} }
+
+/* nota de fuente / método */
+.fuente-nota{margin-top:28px;font-size:.8125rem;color:var(--hueso-4);line-height:1.6;max-width:80ch;
+  padding-top:18px;border-top:1px solid var(--linea)}
+.fuente-nota b{color:var(--hueso-3);font-weight:600}
+
+/* lista método */
+.metodo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;max-width:80ch}
+.metodo li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;color:var(--hueso-2);font-size:.9375rem;line-height:1.55}
+.metodo li .rombo{margin-top:7px}
+.metodo li b{color:var(--hueso);font-weight:600}
+
+/* volver */
+.volver{font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--hueso-3);text-decoration:none}
+.volver:hover{color:var(--hueso)}

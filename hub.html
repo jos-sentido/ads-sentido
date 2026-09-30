@@ -43,6 +43,7 @@
           <button class="btn" id="aplicar" style="width:100%;justify-content:center;margin-top:14px">Aplicar</button>
         </div>
       </div>
+      <a class="btn btn--fantasma" id="ver-reportes" href="#" hidden>Reportes</a>
       <button class="btn btn--fantasma" id="imprimir" type="button">Imprimir</button>
     </div>
   </header>
@@ -373,6 +374,13 @@ $('#aplicar').addEventListener('click',()=>{
   panel.hidden=true; btn.setAttribute('aria-expanded','false'); refresh();
 });
 $('#imprimir').addEventListener('click',()=>window.print());
+
+// ── Entrada a Reportes (solo marcas con archivo publicado) ──
+const REPORTES_BRANDS = ['heredit'];
+(function wireReportes(){
+  const a=$('#ver-reportes'); if(!a) return;
+  if(REPORTES_BRANDS.includes(BRAND)){ a.href='/reportes/'+BRAND; a.hidden=false; }
+})();
 
 // ── Init ── default: mes pasado
 (function init(){

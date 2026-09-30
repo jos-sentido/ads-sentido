@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Heredit · Auditoría Meta Ads — 30 sep 2026</title>
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/favicon-180.png">
+<link rel="stylesheet" href="/assets/panel.css">
+<link rel="stylesheet" href="/assets/reportes.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="barra">
+    <div class="marca">
+      <img src="/assets/logo-sentido-nombre-light.png" alt="Sentido">
+      <span class="ojo" aria-hidden="true"></span>
+    </div>
+    <div class="cliente">
+      <span class="rotulo">Auditoría base · Meta Ads</span>
+      <h2>Heredit</h2>
+    </div>
+    <div class="controles no-print">
+      <a class="btn btn--fantasma" href="/reportes/heredit">← Reportes</a>
+      <a class="btn btn--fantasma" href="/heredit">Dashboard</a>
+      <button class="btn btn--fantasma" id="imprimir" type="button">Imprimir</button>
+    </div>
+  </header>
+
+  <section aria-label="Contexto" style="padding-block:28px 0">
+    <p class="rotulo" style="color:var(--hueso-4)">
+      Periodo 11 jun – 30 sep 2026 · Corte 30 sep 2026 · Cuenta act_968535875781645 · Península&nbsp;/&nbsp;peninsula.residence · MXN
+    </p>
+  </section>
+
+  <!-- ── Resumen / KPIs ── -->
+  <section aria-label="Indicadores">
+    <div class="kpis kpis--5" id="kpis"></div>
+    <div class="an-kpi-slim"><span class="rombo rombo--lleno"></span>
+      <span class="txt" id="headline"></span></div>
+    <div class="analisis" style="margin-top:34px">
+      <span class="rotulo">Los tres hallazgos</span>
+      <ul id="hallazgos"></ul>
+    </div>
+  </section>
+
+  <!-- ── Calidad de lead (CRM) ── -->
+  <section id="sec-crm">
+    <div class="cab"><div><div class="pleca"></div><h3>Calidad de lead · CRM</h3></div>
+      <p class="meta-nota">Lo que la pauta no ve sola: cuántos de esos leads califican.</p></div>
+    <div class="split">
+      <div>
+        <div class="funnel" id="funnel"></div>
+        <p class="fuente-nota">Embudo de Heredit en el CRM del cliente (Zoho), <b>solo leads de redes sociales</b>
+          (los que atribuyen a Meta), rango 11 jun – 30 sep. Porcentajes sobre Prospecto.</p>
+      </div>
+      <div>
+        <div class="kpis" style="grid-template-columns:1fr 1fr">
+          <div class="kpi" style="border-left:0;padding-left:0"><div class="rotulo">CP-Perfilado</div>
+            <div class="cifra num"><span class="cur">$</span>15,466</div>
+            <div class="pie"><span class="delta"><span class="vs">costo del lead que califica</span></span></div></div>
+          <div class="kpi"><div class="rotulo">Tasa de perfilado</div>
+            <div class="cifra num">8.9<span class="cur" style="margin-left:.06em">%</span></div>
+            <div class="pie"><span class="delta"><span class="vs">5 de 56 leads</span></span></div></div>
+        </div>
+        <div class="analisis" style="margin-top:28px">
+          <ul>
+            <li><span class="rombo rombo--lleno"></span><span class="txt">El CPL dice <b>$859</b>; el costo real del lead que <b>califica</b> es <b>$15,466</b> — <b>18 veces</b> más. Es el número que manda, no el CPL.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt">De cada <b>100</b> leads que entran, <b>9</b> perfilan y <b>0</b> llegaron a trato en el periodo. La pauta trae volumen; la calidad es el cuello de botella.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt"><b>Cuadre:</b> Meta reporta <b>90</b> leads, el CRM registró <b>56</b> por redes en el mismo rango (62%). El CP-Perfilado es aproximado por esa fuga de medición; la dirección es firme.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Ubicaciones ── -->
+  <section id="sec-ubic">
+    <div class="cab"><div><div class="pleca"></div><h3>Dónde se gastó y dónde rindió</h3></div>
+      <p class="meta-nota">Inversión y costo por lead por ubicación.</p></div>
+    <div class="hbars" id="ubic"></div>
+    <div class="analisis" style="margin-top:36px">
+      <span class="rotulo">Lo que dice la data</span>
+      <ul>
+        <li><span class="rombo rombo--lleno"></span><span class="txt"><b>Instagram</b> concentra el 63% del gasto y el 73% de los leads, a <b>$743</b> de CPL. <b>Facebook</b> cuesta <b>$1,179</b> — 59% más caro por lead.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt"><b>Facebook Reels</b> es la ubicación más cara: <b>$8,890</b> para <b>5</b> leads (<b>$1,778</b> c/u). <b>Instagram Feed</b> es la más eficiente: <b>$563</b>.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Instagram Stories es el motor de volumen (<b>34</b> leads), pero a CPL medio ($810); el volumen barato vive en el <b>Feed</b>.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Demografía ── -->
+  <section id="sec-demo">
+    <div class="cab"><div><div class="pleca"></div><h3>Quién respondió</h3></div>
+      <p class="meta-nota">Leads y costo por lead por grupo de edad.</p></div>
+    <div class="hbars" id="demo"></div>
+    <div class="analisis" style="margin-top:36px">
+      <span class="rotulo">Lo que dice la data</span>
+      <ul>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Los leads más baratos son los de <b>55–64</b> ($596) y <b>65+</b> ($696) — perfil maduro, con más probabilidad de poder adquisitivo para un departamento desde <b>$10.3&nbsp;MDP</b>.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Casi la mitad del volumen (<b>40</b> leads) son <b>18–34</b>. Son baratos de captar pero son la franja que menos encaja con el ticket — probable origen del <b>8.9%</b> de perfilado.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Las edades del comprador real (<b>35–54</b>) son las <b>más caras</b> ($1,197–$1,358): la puja compite por ellas. Ahí es donde el mensaje tiene que trabajar, no en abaratar el clic.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Creativos ── -->
+  <section id="sec-creativos">
+    <div class="cab"><div><div class="pleca"></div><h3>Los anuncios</h3></div>
+      <p class="meta-nota">El copy es un template compartido; lo que cambia es la línea de mensaje y el formato.</p></div>
+    <table class="tabla">
+      <thead><tr><th>Anuncio (top por leads)</th><th>Formato</th><th>Inversión</th><th>Leads</th><th>CPL</th><th>Estado</th></tr></thead>
+      <tbody id="creativos"></tbody>
+    </table>
+    <div class="analisis" style="margin-top:36px">
+      <span class="rotulo">Lo que dice la data</span>
+      <ul>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Tres líneas de mensaje conviven: <b>Lifestyle</b> ("una decisión que se disfruta"), <b>Inversión</b> ("visión de futuro, plusvalía") y, desde el 15 sep, <b>Esquema de pago</b> ("30% enganche, 50% crédito, 20% diferido").</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">El anuncio de más volumen es un <b>reel</b> a <b>$574</b> de CPL. Los reels mandan; los carruseles ("carrete") aún traen poco lead.</span></li>
+        <li><span class="rombo rombo--lleno"></span><span class="txt">Hay <b>~30</b> variaciones del mismo template. El diferenciador entre CPL alto y bajo no es el copy (es común) sino el <b>hook y el formato</b> — el análisis por capas del video queda para el siguiente corte.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Conjuntos: estado y acción ── -->
+  <section id="sec-conjuntos">
+    <div class="cab"><div><div class="pleca"></div><h3>Conjuntos: estado y acción</h3></div>
+      <p class="meta-nota">Agrupados por línea de mensaje.</p></div>
+    <table class="tabla">
+      <thead><tr><th>Línea de mensaje</th><th>Inversión</th><th>Leads</th><th>CPL</th><th>Acción</th></tr></thead>
+      <tbody id="conjuntos"></tbody>
+    </table>
+  </section>
+
+  <!-- ── Qué se hizo ── -->
+  <section id="sec-timeline">
+    <div class="cab"><div><div class="pleca"></div><h3>Qué se hizo en el periodo</h3></div>
+      <p class="meta-nota">Cronología que explica el comportamiento del gasto.</p></div>
+    <table class="tabla">
+      <thead><tr><th>Fecha</th><th>Movimiento</th></tr></thead>
+      <tbody id="timeline"></tbody>
+    </table>
+  </section>
+
+  <!-- ── Recomendaciones + plan ── -->
+  <section id="sec-plan">
+    <div class="cab"><div><div class="pleca"></div><h3>Plan de acción</h3></div>
+      <p class="meta-nota">Lo accionable, en orden de impacto. Opportunity score de la cuenta: 56/100.</p></div>
+    <table class="tabla">
+      <thead><tr><th>Prioridad</th><th>Tarea</th><th>Por qué</th></tr></thead>
+      <tbody id="plan"></tbody>
+    </table>
+    <p class="fuente-nota">Al aplicarlas, el próximo corte medirá si la <b>tasa de perfilado</b> sube de 8.9% y si
+      el <b>CP-Perfilado</b> baja de $15,466 — no solo el CPL.</p>
+  </section>
+
+  <!-- ── Lectura ── -->
+  <section class="papel" id="sec-lectura">
+    <div class="lectura"><div class="pleca"></div><h3>Lectura</h3>
+      <div class="firma">Análisis · Sentido</div>
+      <p><span class="en">En tres meses y medio, Heredit gastó $77,330 y trajo 90 leads a $859 cada uno.</span> Es un CPL razonable para el segmento. El problema no está en el costo del lead: está en lo que pasa después. El CRM del cliente dice que de esos leads, solo <b>9%</b> califican y <b>ninguno</b> llegó a trato en el periodo.</p>
+      <p><span class="en">Traducido a dinero, el lead que sirve cuesta $15,466 — dieciocho veces el CPL.</span> Bajar el CPL con más volumen barato empeora este número, no lo mejora; es lo que pasó a mediados de septiembre, cuando se escaló el gasto a $14,391 en una semana y solo entraron 10 leads.</p>
+      <p><span class="en">La palanca no es el clic, es la calidad.</span> Instagram ya es más eficiente que Facebook (corta o reduce Facebook Reels). El perfil maduro (55+) es barato y encaja con el ticket; el 18–34 es la mitad del volumen y casi no perfila. Y Meta lo dice también: conectar el CRM a la API de conversiones puede bajar el costo del lead de calidad ~24%, porque la campaña aprendería a buscar gente que perfila, no gente que llena formularios.</p>
+      <p><span class="en">El siguiente paso es medición.</span> Cuadrar CRM y Meta (hoy se pierde 38% de los leads en el camino) y atribuir perfilados por anuncio. Con eso, el próximo corte puede decir qué creativo trae leads que califican —no cuál es barato— y ahí es donde se mueve el número que importa.</p>
+    </div>
+  </section>
+
+  <!-- ── Método ── -->
+  <section id="sec-metodo">
+    <div class="cab"><div><div class="pleca"></div><h3>Método y límites</h3></div></div>
+    <ul class="metodo">
+      <li><span class="rombo"></span><span><b>Fuente pauta:</b> API de Meta Ads, cuenta act_968535875781645, 11 jun (primer día de actividad de la campaña) – 30 sep 2026. Cifras a valor de vida de la campaña en ese rango.</span></li>
+      <li><span class="rombo"></span><span><b>Fuente calidad:</b> CRM del cliente (Zoho), leído el 30 sep 2026, mismo rango, solo agregados por etapa (nunca datos de prospectos individuales).</span></li>
+      <li><span class="rombo"></span><span><b>Mandato:</b> Sentido responde por el lead perfilado (primario) y la cita (secundario). El trato/venta lo cierra el equipo comercial del cliente — es contexto, no cargo a la pauta.</span></li>
+      <li><span class="rombo"></span><span><b>Lo que este dato no responde:</b> CP-Perfilado por creativo (falta cuadrar anuncio↔CRM) y la calidad de lead de Google (cae como "sitio web" sin atribución por campaña). Ambos, al siguiente corte.</span></li>
+      <li><span class="rombo"></span><span><b>Muestra:</b> 90 leads / 5 perfilados es base chica. Las cifras por ubicación y edad indican dirección, no conclusión cerrada.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="fm"><span class="ojo" aria-hidden="true"></span>
+      <img class="nom" src="/assets/logo-sentido-nombre-light.png" alt="Sentido"></div>
+    <p class="fnota">Auditoría base Meta Ads · 11 jun – 30 sep 2026 · Documento privado, solo para Heredit · Sentido desde 2010.</p>
+  </footer>
+</div>
+
+<script>
+// ── Gate de sesión (consistente con el panel privado) ──
+fetch('/api/session').then(r=>r.json()).then(s=>{ if(!s.authed) location.href='/'; }).catch(()=>{});
+
+const esMX = n => (Number(n)||0).toLocaleString('es-MX');
+const money = v => '<span class="cur">$</span>'+esMX(Math.round(v));
+const money2 = v => '<span class="cur">$</span>'+(Number(v)||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+// ── KPIs ──
+const KPIS=[
+  {r:'Costo por lead · CPL', v:'<span class="cur">$</span>859.22'},
+  {r:'Leads', v:'90'},
+  {r:'Inversión', v:money(77329.54)},
+  {r:'CP-Perfilado', v:money(15466)},
+  {r:'Tasa de perfilado', v:'8.9<span class="cur" style="margin-left:.06em">%</span>'},
+];
+document.getElementById('kpis').innerHTML = KPIS.map(k=>
+  `<div class="kpi"><div class="rotulo">${k.r}</div><div class="cifra num">${k.v}</div></div>`).join('');
+document.getElementById('headline').innerHTML =
+  '<b>90 leads</b> a <b>$859</b> de CPL, pero el lead que <b>califica</b> cuesta <b>$15,466</b>: la pauta trae volumen, la calidad es el pendiente.';
+
+document.getElementById('hallazgos').innerHTML = [
+  'El <b>costo del lead de calidad</b> (CP-Perfilado $15,466) es 18× el CPL. El KPI que manda no es el CPL.',
+  '<b>Instagram le gana a Facebook</b> por lead ($743 vs $1,179). Facebook Reels quema $8,890 para 5 leads.',
+  'A mediados de sep <b>escalar el gasto encareció el lead</b>: $14,391 en una semana, 10 leads. Más presupuesto sin mejorar calidad no ayuda.'
+].map(t=>`<li><span class="rombo rombo--lleno"></span><span class="txt">${t}</span></li>`).join('');
+
+// ── Funnel CRM (solo redes sociales = Meta) ──
+const FUNNEL=[
+  {l:'Prospecto', n:56, p:'100%'},
+  {l:'Atendido', n:56, p:'100%'},
+  {l:'Contactado', n:25, p:'44.6%'},
+  {l:'Perfilado', n:5, p:'8.9%', star:true},
+  {l:'Cita agendada', n:3, p:'5.4%'},
+  {l:'Cita concretada', n:2, p:'3.6%'},
+  {l:'Trato creado', n:0, p:'0.0%'},
+];
+const fmax=56;
+document.getElementById('funnel').innerHTML = FUNNEL.map(s=>
+  `<div class="fstep${s.star?' star':''}"><div class="fl${s.star?' star':''}">${s.l}</div>
+    <div class="fbar"><i style="width:${Math.max(s.n/fmax*100,1.5)}%"></i>
+      <span>${s.n}</span><em>${s.p}</em></div></div>`).join('');
+
+// ── Ubicaciones ──
+const UBIC=[
+  {l:'Instagram Stories', spend:27556.32, leads:34, cpl:810},
+  {l:'Instagram Feed', spend:11821.84, leads:21, cpl:563},
+  {l:'Instagram Reels', spend:9659.97, leads:11, cpl:878},
+  {l:'Facebook Feed', spend:10863.27, leads:9, cpl:1207},
+  {l:'Facebook Reels', spend:8890.37, leads:5, cpl:1778},
+  {l:'Facebook Stories', spend:4721.10, leads:6, cpl:787},
+  {l:'Facebook Instream', spend:3814.40, leads:4, cpl:954},
+];
+const uMax=Math.max(...UBIC.map(u=>u.spend));
+document.getElementById('ubic').innerHTML = UBIC.map(u=>
+  `<div class="hbar"><div class="lab">${u.l}<small>${u.leads} leads · CPL $${esMX(u.cpl)}</small></div>
+    <div class="track"><div class="fill" style="width:${u.spend/uMax*100}%"></div></div>
+    <div class="val">${money(u.spend)}</div></div>`).join('');
+
+// ── Demografía (por grupo de edad) ──
+const DEMO=[
+  {l:'18–24', leads:17, cpl:837},
+  {l:'25–34', leads:23, cpl:755},
+  {l:'35–44', leads:12, cpl:1197},
+  {l:'45–54', leads:10, cpl:1358},
+  {l:'55–64', leads:17, cpl:596},
+  {l:'65+', leads:11, cpl:696},
+];
+const dMax=Math.max(...DEMO.map(d=>d.leads));
+document.getElementById('demo').innerHTML = DEMO.map(d=>
+  `<div class="hbar"><div class="lab">${d.l}<small>CPL $${esMX(d.cpl)}</small></div>
+    <div class="track"><div class="fill fill--soft" style="width:${d.leads/dMax*100}%"></div></div>
+    <div class="val"><b>${d.leads}</b><small>leads</small></div></div>`).join('');
+
+// ── Creativos ──
+const CREA=[
+  {n:'Reel · Lifestyle (jul)', fmt:'Reel', spend:13780.52, leads:24, cpl:574, st:'Activo'},
+  {n:'Reel · Inversión (abr)', fmt:'Reel', spend:12466.16, leads:17, cpl:733, st:'Activo'},
+  {n:'Reel · Inversión (copia)', fmt:'Reel', spend:9045.79, leads:12, cpl:754, st:'Pausado'},
+  {n:'Reel · Lifestyle (may)', fmt:'Reel', spend:6511.59, leads:8, cpl:814, st:'Activo'},
+  {n:'Reel · Lifestyle (may, copia)', fmt:'Reel', spend:4340.07, leads:8, cpl:543, st:'Pausado'},
+  {n:'Reel · Esquema de pago', fmt:'Reel', spend:5426.23, leads:1, cpl:5426, st:'Activo'},
+];
+document.getElementById('creativos').innerHTML = CREA.map(c=>
+  `<tr><td>${c.n}</td><td>${c.fmt}</td><td>${money2(c.spend)}</td><td class="hi">${c.leads}</td>
+    <td>${money2(c.cpl)}</td><td><span class="estado">${c.st}</span></td></tr>`).join('');
+
+// ── Conjuntos por línea de mensaje ──
+const CONJ=[
+  {l:'General / marca', spend:58990.48, leads:79, cpl:746.71, acc:'Mantener. Es el motor del volumen; aquí se afina la calidad.'},
+  {l:'Esquema de pago', spend:10114.31, leads:8, cpl:1264.29, acc:'Vigilar. Mensaje nuevo (sep); aún caro. Darle 2 semanas con creativo de imagen.'},
+  {l:'Esquema de pago · premium', spend:8224.75, leads:3, cpl:2741.58, acc:'Ajustar. CPL 3× el general; consolidar con el resto (ver recomendación de fragmentación).'},
+];
+document.getElementById('conjuntos').innerHTML = CONJ.map(c=>
+  `<tr><td>${c.l}</td><td>${money2(c.spend)}</td><td class="hi">${c.leads}</td><td>${money2(c.cpl)}</td>
+    <td class="acc">${c.acc}</td></tr>`).join('');
+
+// ── Timeline ──
+const TL=[
+  {d:'11 jun', t:'Arranca la campaña de leads (iteración "AllOn 4"). Junio: 12 creativos nuevos, prueba pesada.'},
+  {d:'jul', t:'Mayor rotación de creativos (5 nuevos + altas/bajas). Ritmo estable ~$4–5k/semana.'},
+  {d:'ago', t:'Periodo tranquilo, sin cambios estructurales.'},
+  {d:'15–16 sep', t:'Lanza el creativo "Esquema de pago" y sube el presupuesto del conjunto a $996/día.'},
+  {d:'17–23 sep', t:'Semana de $14,391 y solo 10 leads → CPL disparado. El escalón no rindió.'},
+  {d:'24 sep', t:'Baja presupuestos ($650→$402/día en dos conjuntos).'},
+  {d:'25 sep', t:'Reestructura: presupuesto a nivel campaña ($700/día) consolidando conjuntos. Atiende la fragmentación que marca Meta.'},
+];
+document.getElementById('timeline').innerHTML = TL.map(x=>
+  `<tr><td style="white-space:nowrap;color:var(--hueso);font-weight:600">${x.d}</td><td class="acc" style="padding-left:24px">${x.t}</td></tr>`).join('');
+
+// ── Plan ──
+const PLAN=[
+  {p:'1', t:'Conectar el CRM a la API de conversiones (CAPI)', w:'Meta estima −24% en costo de lead de calidad. La campaña optimizaría hacia gente que perfila, no que llena formularios. Es la palanca de fondo.'},
+  {p:'2', t:'Recortar Facebook Reels y Feed; concentrar en Instagram', w:'FB Reels cuesta $1,778/lead vs $563 de IG Feed. Mover ese gasto a Instagram baja el CPL medio sin tocar volumen.'},
+  {p:'3', t:'No escalar presupuesto hasta cerrar la medición', w:'El escalón de sep encareció el lead. Sin señal de calidad de vuelta, más gasto = más volumen que no perfila.'},
+  {p:'4', t:'Cuadrar CRM ↔ Meta y atribuir perfilados por anuncio', w:'Hoy se pierde 38% de los leads entre Meta y el CRM. Con el cuadre, el próximo corte da CP-Perfilado por creativo.'},
+  {p:'5', t:'Probar mensaje para 35–54 (comprador real) y sostener el maduro 55+', w:'El 18–34 es volumen barato que no encaja con el ticket. Ahí está la fuga de perfilado.'},
+];
+document.getElementById('plan').innerHTML = PLAN.map(x=>
+  `<tr><td class="hi" style="text-align:left">${x.p}</td><td style="text-align:left;color:var(--hueso);font-weight:600;padding-right:20px">${x.t}</td><td class="acc">${x.w}</td></tr>`).join('');
+
+document.getElementById('imprimir').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>

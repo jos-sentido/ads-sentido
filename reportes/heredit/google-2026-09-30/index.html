@@ -93,20 +93,20 @@
     <div class="split">
       <div>
         <div class="kpis" style="grid-template-columns:1fr 1fr">
-          <div class="kpi" style="border-left:0;padding-left:0"><div class="rotulo">Conversiones</div>
+          <div class="kpi" style="border-left:0;padding-left:0"><div class="rotulo">Leads · CRM sitio web</div>
+            <div class="cifra num">~19</div>
+            <div class="pie"><span class="delta"><span class="vs">21 may – 30 sep · el CRM sí los ve</span></span></div></div>
+          <div class="kpi"><div class="rotulo">Conv. de plataforma</div>
             <div class="cifra num">0</div>
-            <div class="pie"><span class="delta"><span class="vs">en toda la vida de la cuenta</span></span></div></div>
-          <div class="kpi"><div class="rotulo">Costo / conversión</div>
-            <div class="cifra num">—</div>
-            <div class="pie"><span class="delta"><span class="vs">sin dato posible</span></span></div></div>
+            <div class="pie"><span class="delta"><span class="vs">Google no las mide</span></span></div></div>
         </div>
       </div>
       <div>
         <div class="analisis" style="margin-top:0">
           <ul>
-            <li><span class="rombo rombo--lleno"></span><span class="txt">El anuncio manda al <b>sitio oficial (heredit.mx)</b>, donde el formulario <b>no está medido</b> de vuelta a Google. Por eso hay 0 conversiones: hoy se mide <b>tráfico, no leads</b>.</span></li>
-            <li><span class="rombo rombo--lleno"></span><span class="txt">En el CRM del cliente, Google cae como <b>"sitio web"</b> sin campaña. La calidad de lead de Google solo se puede leer <b>a nivel desarrollo</b>, no por campaña, hasta que el sitio pase el evento a Google.</span></li>
-            <li><span class="rombo rombo--lleno"></span><span class="txt">Es el <b>pendiente #1</b>: sin conversión medida no hay costo por lead real de Google ni optimización hacia leads.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt">El anuncio manda al <b>sitio oficial (heredit.mx)</b>, donde el formulario <b>no reporta de vuelta</b> a Google — por eso la plataforma marca 0. Pero el CRM sí los ve: <b>~19 leads</b> de "sitio web" en la vida de la cuenta, <b>1 perfilado</b>.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt"><b>"Sitio web" es un proxy de Google:</b> incluye también tráfico directo y orgánico al sitio, y llega sin atribución por campaña. Por eso 19 es un <b>tope</b> y la calidad se lee a nivel desarrollo, no por campaña.</span></li>
+            <li><span class="rombo rombo--lleno"></span><span class="txt"><b>Pendiente #1:</b> medir la conversión en el sitio para que Google vea sus leads y optimice hacia calidad. Hoy vuela a ciegas.</span></li>
           </ul>
         </div>
       </div>
@@ -129,7 +129,7 @@
   <section class="papel" id="sec-lectura">
     <div class="lectura"><div class="pleca"></div><h3>Lectura</h3>
       <div class="firma">Análisis · Sentido</div>
-      <p><span class="en">Google trajo 1,182 clics por $10,574 en cuatro meses, pero la cuenta hoy mide tráfico, no leads.</span> No hay una sola conversión registrada, porque el anuncio lleva al sitio oficial y ahí el formulario no reporta de vuelta. Sin ese cierre, no se puede decir cuánto cuesta un lead de Google.</p>
+      <p><span class="en">Google trajo 1,182 clics por $10,574 en cuatro meses.</span> La plataforma no registra ninguna conversión —el anuncio lleva al sitio oficial y el formulario no reporta de vuelta—, pero el CRM del cliente sí los ve: <b>~19 leads</b> de "sitio web" a <b>~$557</b> cada uno, incluso más barato que el lead de Meta. El problema no es que Google no traiga leads; es que <b>no los ve</b>, así que no puede optimizar hacia ellos (y de esos 19, solo 1 perfiló).</p>
       <p><span class="en">Lo que sí se puede leer es la calidad del tráfico, y hay tres fugas.</span> La primera: Display está encendido en una campaña de Búsqueda y se lleva la mitad de los clics con baja intención. La segunda: casi un tercio del gasto visible se va en nombres de otros desarrollos, tráfico que no es de Heredit. La tercera: el bucket más grande es la marca — gente que ya buscaba Heredit — que es cosecha, no prospección.</p>
       <p><span class="en">El orden es claro.</span> Medir la conversión (que el sitio dispare el evento a Google), apagar Display, y limpiar negativas para dejar de pagar por otros desarrollos. Con eso, el presupuesto —hoy limitado a $100/día— trabaja en búsquedas con intención, y el próximo corte ya puede hablar de costo por lead, no de clics.</p>
     </div>
@@ -162,19 +162,19 @@ const money = v => '<span class="cur">$</span>'+esMX(Math.round(v));
 const KPIS=[
   {r:'Inversión', v:money(10573.63)},
   {r:'Clics', v:esMX(1182)},
-  {r:'CTR', v:'5.38<span class="cur" style="margin-left:.06em">%</span>'},
-  {r:'CPC promedio', v:'<span class="cur">$</span>8.95'},
-  {r:'Conversiones', v:'0'},
+  {r:'Leads · CRM sitio web', v:'~19'},
+  {r:'CP-lead · CRM', v:'~<span class="cur">$</span>557'},
+  {r:'Conv. de plataforma', v:'0'},
 ];
 document.getElementById('kpis').innerHTML = KPIS.map(k=>
   `<div class="kpi"><div class="rotulo">${k.r}</div><div class="cifra num">${k.v}</div></div>`).join('');
 document.getElementById('headline').innerHTML =
-  '<b>$10,574</b> y <b>1,182 clics</b> en cuatro meses, pero <b>0 conversiones</b>: hoy la cuenta mide tráfico, no leads. Lo que sí se lee es la calidad de ese tráfico — y hay fugas.';
+  '<b>$10,574</b> y <b>1,182 clics</b> en cuatro meses. La plataforma marca <b>0 conversiones</b>, pero el CRM del cliente captura <b>~19 leads</b> del sitio (1 perfiló): Google sí trae leads — no los mide. El pendiente de fondo es medir la conversión.';
 
 document.getElementById('hallazgos').innerHTML = [
   '<b>Display encendido en una campaña de Búsqueda:</b> 69% de las impresiones y la mitad de los clics, con baja intención.',
   '<b>~1/3 del gasto visible</b> se va en nombres de <b>otros desarrollos</b>; el bucket más grande es la <b>marca</b> (cosecha).',
-  '<b>0 conversiones</b> porque el anuncio va al sitio oficial sin medición de vuelta. Es el pendiente de fondo.'
+'La plataforma marca <b>0 conversiones</b>, pero el CRM captura <b>~19 leads</b> del sitio a <b>~$557</b> c/u (más barato que el CPL de Meta); solo <b>1 perfiló</b> (5.3 %). Google no ve sus propios leads, así que no puede optimizar hacia ellos.'
 ].map(t=>`<li><span class="rombo rombo--lleno"></span><span class="txt">${t}</span></li>`).join('');
 
 // Red
